@@ -2,6 +2,18 @@
 @import "tailwindcss";
 
 @theme {
+  --color-brand-primary: #7C5DFA;
+  --color-brand-primary-light: #9277FF;
+  --color-brand-danger: #EC5757;
+  --color-brand-danger-light: #FF9797;
+  --color-brand-background: #F8F8FB;
+  --color-brand-dark: #1E2139;
+  --color-brand-surface-dark: #141625;
+  --color-brand-dark-light: #252945;
+  --color-brand-muted: #888EB0;
+  --color-brand-muted-dark: #7E88C3;
+  --color-brand-muted-light: #DFE3FA;
+  --color-brand-black: #0C0E16;
   --font-league-spartan: "League Spartan", sans-serif;
 }
 
