@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Button from "../components/Button.vue";
+import Input from "../components/Input.vue";
 </script>
 
 <template>
@@ -59,6 +60,26 @@ import Button from "../components/Button.vue";
                 <template #icon> + </template>
                 Add Payment Details
               </Button>
+            </div>
+          </article>
+
+          <article
+            class="rounded-xl border border-slate-200 bg-brand-surface-dark px-4 py-4 sm:px-5"
+          >
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500"
+            >
+              Input component demo
+            </p>
+            <div class="mt-4 max-w-sm">
+              <Input
+                id="invoice-number"
+                label="Invoice Number"
+                name="invoiceNumber"
+                type="text"
+                placeholder="e.g. XM9141"
+                autocomplete="off"
+              />
             </div>
           </article>
 

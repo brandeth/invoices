@@ -3,17 +3,17 @@
 @source "../../../components";
 
 @theme {
-  --color-brand-primary: #7c5dfa;
+  --color-brand-primary: #7c5dfa; /* 01 */
   --color-brand-primary-light: #9277ff;
   --color-brand-danger: #ec5757;
   --color-brand-danger-light: #ff9797;
   --color-brand-background: #f8f8fb;
-  --color-brand-dark: #1e2139;
-  --color-brand-surface-dark: #141625;
-  --color-brand-dark-light: #252945;
+  --color-brand-dark: #1e2139; /* 03 */
+  --color-brand-surface-dark: #141625; /* 12 */
+  --color-brand-dark-light: #252945; /* 04 */
   --color-brand-muted: #888eb0;
-  --color-brand-muted-dark: #7e88c3;
-  --color-brand-muted-light: #dfe3fa;
+  --color-brand-muted-dark: #7e88c3; /* 07 */
+  --color-brand-muted-light: #dfe3fa; /* 05 */
   --color-brand-black: #0c0e16;
   --font-league-spartan: "League Spartan", sans-serif;
 }
