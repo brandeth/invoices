@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Button from "../components/Button.vue";
+import DatePicker from "../components/DatePicker.vue";
 import Dropdown from "../components/Dropdown.vue";
 import Input from "../components/Input.vue";
 
@@ -11,6 +12,7 @@ const statusOptions = [
 ];
 
 const selectedStatus = ref<string>();
+const selectedInvoiceDate = ref<string>();
 </script>
 
 <template>
@@ -114,6 +116,31 @@ const selectedStatus = ref<string>();
                 Selected value:
                 <span class="text-slate-900">{{
                   selectedStatus ?? "None"
+                }}</span>
+              </p>
+            </div>
+          </article>
+
+          <article
+            class="rounded-xl border border-slate-200 bg-white px-4 py-4 sm:px-5"
+          >
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500"
+            >
+              DatePicker component demo
+            </p>
+
+            <div class="mt-4 max-w-sm space-y-3">
+              <DatePicker
+                v-model="selectedInvoiceDate"
+                label="Invoice Date"
+                placeholder="Select invoice date"
+              />
+
+              <p class="preset-body text-slate-600">
+                Selected value:
+                <span class="text-slate-900">{{
+                  selectedInvoiceDate ?? "None"
                 }}</span>
               </p>
             </div>
