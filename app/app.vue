@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import Button from "../components/Button.vue";
+</script>
+
 <template>
   <div class="min-h-screen bg-slate-100 text-slate-900">
     <NuxtRouteAnnouncer />
@@ -24,6 +28,29 @@
         </header>
 
         <div class="mt-6 space-y-4">
+          <article
+            class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 sm:px-5"
+          >
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500"
+            >
+              Button component demo
+            </p>
+            <div class="mt-4">
+              <Button>
+                <template #icon>
+                  <img
+                    src="/icons/plus.svg"
+                    alt=""
+                    class="h-[10px] w-[10px]"
+                    aria-hidden="true"
+                  />
+                </template>
+                New Invoice
+              </Button>
+            </div>
+          </article>
+
           <article
             class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 sm:px-5"
           >
