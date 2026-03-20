@@ -1,6 +1,16 @@
 <script setup lang="ts">
 import Button from "../components/Button.vue";
+import Dropdown from "../components/Dropdown.vue";
 import Input from "../components/Input.vue";
+
+const statusOptions = [
+  { label: "All Status", value: "all" },
+  { label: "Draft", value: "draft" },
+  { label: "Pending", value: "pending" },
+  { label: "Paid", value: "paid" },
+];
+
+const selectedStatus = ref<string>();
 </script>
 
 <template>
@@ -80,6 +90,32 @@ import Input from "../components/Input.vue";
                 placeholder="e.g. XM9141"
                 autocomplete="off"
               />
+            </div>
+          </article>
+
+          <article
+            class="rounded-xl border border-slate-200 bg-white px-4 py-4 sm:px-5"
+          >
+            <p
+              class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500"
+            >
+              Dropdown component demo
+            </p>
+
+            <div class="mt-4 max-w-sm space-y-3">
+              <Dropdown
+                v-model="selectedStatus"
+                label="Status"
+                :options="statusOptions"
+                placeholder="Filter by status"
+              />
+
+              <p class="preset-body text-slate-600">
+                Selected value:
+                <span class="text-slate-900">{{
+                  selectedStatus ?? "None"
+                }}</span>
+              </p>
             </div>
           </article>
 

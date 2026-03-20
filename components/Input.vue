@@ -22,7 +22,7 @@ const inputAttrs = computed(() => {
 });
 
 const inputClass = computed(() => [
-  "preset-heading-s-variant min-w-[240px] rounded-[4px] border border-brand-muted-light px-5 py-[18px] text-brand-black transition-colors focus:border-brand-primary-light focus:outline-none dark:border-brand-dark-light dark:bg-brand-dark dark:text-white dark:focus:border-brand-primary",
+  "preset-heading-s-variant min-w-[240px] rounded-[4px] border border-brand-muted-light px-5 py-[18px] text-brand-black caret-brand-primary transition-colors focus:border-brand-primary-light focus:outline-none dark:border-brand-dark-light dark:bg-brand-dark dark:text-white dark:focus:border-brand-primary",
   attrs.class,
 ]);
 </script>
