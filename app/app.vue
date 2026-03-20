@@ -29,24 +29,35 @@ import Button from "../components/Button.vue";
 
         <div class="mt-6 space-y-4">
           <article
-            class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 sm:px-5"
+            class="rounded-xl border border-slate-200 bg-white px-4 py-4 sm:px-5"
           >
             <p
               class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500"
             >
               Button component demo
             </p>
-            <div class="mt-4">
+            <div class="mt-4 flex flex-wrap gap-4">
               <Button>
                 <template #icon>
                   <img
                     src="/icons/plus.svg"
                     alt=""
-                    class="h-[10px] w-[10px]"
+                    class="h-2.5 w-2.5"
                     aria-hidden="true"
                   />
                 </template>
                 New Invoice
+              </Button>
+
+              <Button variant="secondary"> Filter Invoices </Button>
+
+              <Button variant="neutral"> Save as Draft </Button>
+
+              <Button variant="danger"> Delete Invoice </Button>
+
+              <Button variant="tertiary">
+                <template #icon> + </template>
+                Add Payment Details
               </Button>
             </div>
           </article>
