@@ -25,16 +25,17 @@ const slots = useSlots();
 const hasIcon = computed(() => Boolean(slots.icon));
 
 const rootVariantClassMap: Record<ButtonVariant, string> = {
+  // secondary - dark:enabled:hover:text-brand-muted-light
   default:
     "bg-brand-primary text-white enabled:hover:bg-brand-primary-light enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-brand-primary-light",
   secondary:
-    "bg-[#f9fafe] text-brand-muted-dark enabled:hover:bg-brand-muted-light enabled:hover:text-brand-muted-dark dark:bg-brand-dark-light dark:text-brand-muted-light dark:enabled:hover:bg-white dark:enabled:hover:text-brand-muted-light enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-brand-muted-dark dark:enabled:focus-visible:outline-brand-muted-light",
+    "bg-[#f9fafe] text-brand-muted-dark enabled:hover:bg-brand-muted-light enabled:hover:text-brand-muted-dark dark:bg-brand-dark-light dark:text-brand-muted-light dark:enabled:hover:bg-white  enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-brand-muted-dark dark:enabled:focus-visible:outline-brand-muted-light",
   neutral:
     "bg-[#373b53] text-brand-muted enabled:hover:bg-brand-black enabled:hover:text-brand-muted dark:bg-[#373b53] dark:text-brand-muted-light dark:enabled:hover:bg-brand-dark dark:enabled:hover:text-brand-muted-light enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-brand-muted-dark dark:enabled:focus-visible:outline-brand-muted-light",
   danger:
     "bg-brand-danger text-white enabled:hover:bg-brand-danger-light enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-brand-danger-light",
   tertiary:
-    "min-w-[350px] justify-center bg-[#f9fafe] text-brand-muted-dark enabled:hover:bg-brand-muted-light enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-brand-muted-dark",
+    "min-w-[350px] justify-center bg-[#f9fafe] enabled:hover:text-brand-muted-dark text-brand-muted-dark enabled:hover:bg-brand-muted-light dark:bg-brand-dark-light dark:text-brand-muted-light dark:enabled:hover:bg-brand-muted-light enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-brand-muted-dark dark:enabled:focus-visible:outline-brand-muted-light",
 };
 
 const contentVariantClassMap: Record<ButtonVariant, string> = {

@@ -147,7 +147,7 @@ const calendarDays = computed<CalendarDay[]>(() => {
 });
 
 const triggerClass = computed(() => [
-  "preset-heading-s-variant flex min-w-60 w-full items-center justify-between gap-4 rounded-[4px] border bg-white px-6 py-[18px] text-left text-brand-black transition-colors outline-none cursor-pointer",
+  "preset-heading-s-variant flex min-w-60 w-full items-center justify-between gap-4 rounded-[4px] border bg-white px-6 py-[18px] text-left text-brand-black transition-colors outline-none cursor-pointer dark:border-brand-dark-light dark:bg-brand-dark dark:text-white",
   isOpen.value
     ? "border-brand-primary"
     : "border-brand-muted-light hover:border-brand-primary focus-visible:border-brand-primary",
@@ -207,11 +207,14 @@ function handleEscape() {
 function getDayClass(day: CalendarDay) {
   return [
     "preset-heading-s-variant flex h-[15px] w-[16px] items-center justify-center rounded-[4px] transition-colors outline-none cursor-pointer p-[8px]",
-    day.isToday
-      ? "border border-brand-primary"
-      : "border border-transparent hover:border-brand-muted-light focus-visible:border-brand-primary",
-    day.isSelected ? "text-brand-primary" : "text-brand-black",
-    !day.isCurrentMonth ? "opacity-[0.08]" : "",
+    day.isSelected
+      ? "text-brand-primary dark:text-brand-primary-light"
+      : day.isToday
+        ? "text-brand-black dark:text-white border border-brand-primary"
+        : "text-brand-black dark:text-white border border-transparent hover:border-brand-muted-light focus-visible:border-brand-primary",
+    !day.isCurrentMonth && !day.isSelected
+      ? "opacity-[0.08] dark:text-brand-muted-light"
+      : "",
   ];
 }
 
@@ -233,7 +236,7 @@ onBeforeUnmount(() => {
     <label
       v-if="label"
       :for="triggerId"
-      class="preset-body-variant text-brand-muted-dark"
+      class="preset-body-variant text-brand-muted-dark dark:text-brand-muted-light"
     >
       {{ label }}
     </label>
@@ -263,7 +266,7 @@ onBeforeUnmount(() => {
       <div
         v-if="isOpen"
         :id="calendarId"
-        class="absolute left-0 top-full z-10 mt-[24px] w-[240px] rounded-lg border border-brand-muted-light bg-white p-6 shadow-xl"
+        class="absolute left-0 top-full z-10 mt-[24px] w-[240px] rounded-lg border border-brand-muted-light bg-white p-6 shadow-xl dark:border-brand-dark-light dark:bg-brand-dark-light"
         role="dialog"
         :aria-labelledby="triggerId"
       >
@@ -283,7 +286,7 @@ onBeforeUnmount(() => {
             />
           </button>
 
-          <p class="preset-heading-s-variant text-brand-black">
+          <p class="preset-heading-s-variant text-brand-black dark:text-white">
             {{ monthLabel }}
           </p>
 
@@ -306,7 +309,7 @@ onBeforeUnmount(() => {
           <span
             v-for="weekday in weekdayLabels"
             :key="weekday"
-            class="preset-heading-s-variant text-center text-brand-black"
+            class="preset-heading-s-variant text-center text-brand-black dark:text-brand-muted-light"
           >
             {{ weekday }}
           </span>
