@@ -1,0 +1,60 @@
+export default defineEventHandler(() => {
+  return [
+    {
+      id: "RT3080",
+      dueDate: "19 Aug 2021",
+      clientName: "Jensen Huang",
+      amount: "$1,800.90",
+      status: "paid",
+      to: "/",
+    },
+    {
+      id: "XM9141",
+      dueDate: "20 Aug 2021",
+      clientName: "Alex Grim",
+      amount: "$556.00",
+      status: "pending",
+      to: "/",
+    },
+    {
+      id: "RG0314",
+      dueDate: "01 Sep 2021",
+      clientName: "John Morrison",
+      amount: "$14,002.33",
+      status: "draft",
+      to: "/",
+    },
+    {
+      id: "RT2080",
+      dueDate: "12 Sep 2021",
+      clientName: "Samantha Lee",
+      amount: "$1,024.00",
+      status: "paid",
+      to: "/",
+    },
+    {
+      id: "AA1449",
+      dueDate: "14 Sep 2021",
+      clientName: "Oliver Grant",
+      amount: "$3,110.44",
+      status: "pending",
+      to: "/",
+    },
+    {
+      id: "TY9141",
+      dueDate: "18 Sep 2021",
+      clientName: "Emily Carter",
+      amount: "$670.12",
+      status: "draft",
+      to: "/",
+    },
+    {
+      id: "FV2353",
+      dueDate: "24 Sep 2021",
+      clientName: "Janet Weiss",
+      amount: "$2,350.00",
+      status: "paid",
+      to: "/",
+    },
+  ];
+});
