@@ -44,14 +44,14 @@ function toggleTheme() {
 
 <template>
   <div
-    class="min-h-screen overflow-hidden bg-brand-background text-brand-black dark:bg-brand-surface-dark dark:text-white"
+    class="h-screen overflow-hidden bg-brand-background text-brand-black dark:bg-brand-surface-dark dark:text-white"
   >
     <NuxtRouteAnnouncer />
 
-    <div class="flex min-h-screen items-start gap-6 sm:gap-8">
+    <div class="flex h-full gap-6 sm:gap-8">
       <Sidebar :is-dark="isDark" @toggle-theme="toggleTheme" />
 
-      <main class="w-full overflow-y-auto min-h-screen px-6 py-10 sm:px-8">
+      <main class="min-w-0 flex-1 overflow-y-auto px-6 py-10 sm:px-8">
         <div class="mx-auto w-full max-w-182.5 space-y-16">
           <InvoicesHeader
             :total-invoices="totalInvoices"
