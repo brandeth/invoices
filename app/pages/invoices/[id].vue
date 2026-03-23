@@ -1,12 +1,29 @@
 <script setup lang="ts">
+import InvoiceDetails from "../../../components/InvoiceDetails.vue";
 import StatusActionBar from "../../../components/StatusActionBar.vue";
 
 type Invoice = {
   id: string;
+  title: string;
+  invoiceDate: string;
+  paymentDue: string;
   dueDate: string;
   clientName: string;
+  clientEmail: string;
   amount: string;
   status: "paid" | "pending" | "draft";
+  senderAddress: {
+    street: string;
+    city: string;
+    postCode: string;
+    country: string;
+  };
+  clientAddress: {
+    street: string;
+    city: string;
+    postCode: string;
+    country: string;
+  };
   to: string;
 };
 
@@ -40,5 +57,16 @@ if (!invoice) {
     </header>
 
     <StatusActionBar :status="invoice.status" />
+
+    <InvoiceDetails
+      :id="invoice.id"
+      :title="invoice.title"
+      :invoice-date="invoice.invoiceDate"
+      :payment-due="invoice.paymentDue"
+      :client-name="invoice.clientName"
+      :client-email="invoice.clientEmail"
+      :sender-address="invoice.senderAddress"
+      :client-address="invoice.clientAddress"
+    />
   </div>
 </template>
