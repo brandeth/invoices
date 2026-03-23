@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import InvoiceSummaryTable from "./InvoiceSummaryTable.vue";
+
 defineProps<{
   id: string;
   title: string;
@@ -6,6 +8,7 @@ defineProps<{
   paymentDue: string;
   clientName: string;
   clientEmail: string;
+  amount: string;
   senderAddress: {
     street: string;
     city: string;
@@ -18,6 +21,12 @@ defineProps<{
     postCode: string;
     country: string;
   };
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: string;
+    total: string;
+  }>;
 }>();
 </script>
 
@@ -80,6 +89,10 @@ defineProps<{
         <p class="preset-body-variant text-brand-muted-dark dark:text-brand-muted-light">Sent to</p>
         <p class="preset-heading-s break-words text-brand-black dark:text-white">{{ clientEmail }}</p>
       </div>
+    </div>
+
+    <div class="mt-12">
+      <InvoiceSummaryTable :items="items" :amount-due="amount" />
     </div>
   </section>
 </template>

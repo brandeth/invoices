@@ -24,6 +24,12 @@ type Invoice = {
     postCode: string;
     country: string;
   };
+  items: Array<{
+    name: string;
+    quantity: number;
+    price: string;
+    total: string;
+  }>;
   to: string;
 };
 
@@ -65,8 +71,10 @@ if (!invoice) {
       :payment-due="invoice.paymentDue"
       :client-name="invoice.clientName"
       :client-email="invoice.clientEmail"
+      :amount="invoice.amount"
       :sender-address="invoice.senderAddress"
       :client-address="invoice.clientAddress"
+      :items="invoice.items"
     />
   </div>
 </template>

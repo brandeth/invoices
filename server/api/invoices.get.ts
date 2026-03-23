@@ -22,6 +22,20 @@ export default defineEventHandler(() => {
         postCode: "SW19 3RQ",
         country: "United Kingdom",
       },
+      items: [
+        {
+          name: "Brand Audit",
+          quantity: 1,
+          price: "$900.00",
+          total: "$900.00",
+        },
+        {
+          name: "Guideline Document",
+          quantity: 1,
+          price: "$900.90",
+          total: "$900.90",
+        },
+      ],
       to: "/invoices/RT3080",
     },
     {
@@ -46,6 +60,20 @@ export default defineEventHandler(() => {
         postCode: "BD1 9PB",
         country: "United Kingdom",
       },
+      items: [
+        {
+          name: "Banner Design",
+          quantity: 1,
+          price: "$156.00",
+          total: "$156.00",
+        },
+        {
+          name: "Email Design",
+          quantity: 2,
+          price: "$200.00",
+          total: "$400.00",
+        },
+      ],
       to: "/invoices/XM9141",
     },
     {
@@ -70,6 +98,26 @@ export default defineEventHandler(() => {
         postCode: "LS1 5PS",
         country: "United Kingdom",
       },
+      items: [
+        {
+          name: "Discovery Workshop",
+          quantity: 2,
+          price: "$1,250.00",
+          total: "$2,500.00",
+        },
+        {
+          name: "UI Design",
+          quantity: 3,
+          price: "$2,500.00",
+          total: "$7,500.00",
+        },
+        {
+          name: "Frontend Build",
+          quantity: 1,
+          price: "$4,002.33",
+          total: "$4,002.33",
+        },
+      ],
       to: "/invoices/RG0314",
     },
     {
@@ -94,6 +142,20 @@ export default defineEventHandler(() => {
         postCode: "M3 1HZ",
         country: "United Kingdom",
       },
+      items: [
+        {
+          name: "Homepage Copy",
+          quantity: 2,
+          price: "$312.00",
+          total: "$624.00",
+        },
+        {
+          name: "CTA Variants",
+          quantity: 5,
+          price: "$80.00",
+          total: "$400.00",
+        },
+      ],
       to: "/invoices/RT2080",
     },
     {
@@ -118,6 +180,26 @@ export default defineEventHandler(() => {
         postCode: "BA1 1BP",
         country: "United Kingdom",
       },
+      items: [
+        {
+          name: "Wireframes",
+          quantity: 4,
+          price: "$250.00",
+          total: "$1,000.00",
+        },
+        {
+          name: "High-Fidelity Screens",
+          quantity: 7,
+          price: "$300.00",
+          total: "$2,100.00",
+        },
+        {
+          name: "Prototype Review",
+          quantity: 1,
+          price: "$10.44",
+          total: "$10.44",
+        },
+      ],
       to: "/invoices/AA1449",
     },
     {
@@ -142,6 +224,20 @@ export default defineEventHandler(() => {
         postCode: "L2 1DS",
         country: "United Kingdom",
       },
+      items: [
+        {
+          name: "Character Sketches",
+          quantity: 2,
+          price: "$150.00",
+          total: "$300.00",
+        },
+        {
+          name: "Scene Illustration",
+          quantity: 1,
+          price: "$370.12",
+          total: "$370.12",
+        },
+      ],
       to: "/invoices/TY9141",
     },
     {
@@ -166,6 +262,20 @@ export default defineEventHandler(() => {
         postCode: "EH2 2DG",
         country: "United Kingdom",
       },
+      items: [
+        {
+          name: "Social Templates",
+          quantity: 5,
+          price: "$250.00",
+          total: "$1,250.00",
+        },
+        {
+          name: "Print Assets",
+          quantity: 2,
+          price: "$550.00",
+          total: "$1,100.00",
+        },
+      ],
       to: "/invoices/FV2353",
     },
   ];
