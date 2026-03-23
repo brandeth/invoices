@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import EmptyState from "../components/EmptyState.vue";
 import InvoiceItem from "../components/InvoiceItem.vue";
 import InvoicesHeader from "../components/InvoicesHeader.vue";
 import Sidebar from "../components/Sidebar.vue";
@@ -27,6 +28,7 @@ const filteredInvoices = computed(() => {
     selectedStatuses.value.includes(invoice.status),
   );
 });
+const hasInvoicesToDisplay = computed(() => filteredInvoices.value.length > 0);
 const isDark = useState<boolean>("color-theme", () => false);
 
 watchEffect(() => {
@@ -60,16 +62,22 @@ function toggleTheme() {
           />
 
           <section class="space-y-4" aria-label="Invoices list">
-            <InvoiceItem
-              v-for="invoice in filteredInvoices"
-              :key="invoice.id"
-              :id="invoice.id"
-              :due-date="invoice.dueDate"
-              :client-name="invoice.clientName"
-              :amount="invoice.amount"
-              :status="invoice.status"
-              :to="invoice.to"
-            />
+            <template v-if="hasInvoicesToDisplay">
+              <InvoiceItem
+                v-for="invoice in filteredInvoices"
+                :key="invoice.id"
+                :id="invoice.id"
+                :due-date="invoice.dueDate"
+                :client-name="invoice.clientName"
+                :amount="invoice.amount"
+                :status="invoice.status"
+                :to="invoice.to"
+              />
+            </template>
+
+            <div v-else class="flex min-h-[calc(100vh-16rem)] items-center justify-center">
+              <EmptyState />
+            </div>
           </section>
         </div>
       </main>
