@@ -64,7 +64,7 @@ const triggerLabel = computed(() => {
 const triggerClass = computed(() => [
   isStatusFilterVariant.value
     ? "preset-heading-s-variant inline-flex w-full max-w-[117.46px] cursor-pointer items-center justify-between gap-3 bg-transparent p-0 text-left text-brand-black outline-none focus-visible:text-brand-primary dark:text-white"
-    : "preset-heading-s-variant flex min-w-60 w-full items-center justify-between gap-4 rounded-[4px] border bg-white px-[18px] py-[20px] text-left text-brand-black transition-colors outline-none cursor-pointer dark:border-brand-dark-light dark:bg-brand-dark dark:text-white",
+    : "preset-heading-s-variant flex min-w-0 w-full items-center justify-between gap-4 rounded-[4px] border bg-white px-6 py-[18px] text-left text-brand-black transition-colors outline-none cursor-pointer dark:border-brand-dark-light dark:bg-brand-dark dark:text-white",
   isStatusFilterVariant.value
     ? ""
     : isOpen.value
@@ -102,13 +102,13 @@ function statusFilterCheckboxClass(value: string) {
 const containerClass = computed(() =>
   isStatusFilterVariant.value
     ? "flex w-full max-w-[117.46px] shrink-0 flex-col"
-    : "flex min-w-60 w-full flex-col gap-2.25",
+    : "flex min-w-0 w-full flex-col gap-2.25",
 );
 
 const wrapperClass = computed(() =>
   isStatusFilterVariant.value
     ? "relative w-full max-w-[117.46px] shrink-0"
-    : "relative inline-block min-w-60 w-full",
+    : "relative inline-block min-w-0 w-full",
 );
 
 const menuClass = computed(() =>

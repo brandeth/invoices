@@ -2,6 +2,8 @@
 import Button from "./Button.vue";
 import Dropdown from "./Dropdown.vue";
 
+const isInvoiceFormOpen = useState<boolean>("invoice-form-open", () => false);
+
 const props = defineProps<{
   totalInvoices: number;
   selectedStatuses: string[];
@@ -21,6 +23,10 @@ function handleSelectedStatusesUpdate(value: string | string[]) {
   if (Array.isArray(value)) {
     emit("update:selectedStatuses", value);
   }
+}
+
+function openInvoiceForm() {
+  isInvoiceFormOpen.value = true;
 }
 </script>
 
@@ -46,7 +52,7 @@ function handleSelectedStatusesUpdate(value: string | string[]) {
           @update:model-value="handleSelectedStatusesUpdate"
         />
 
-        <Button>
+        <Button @click="openInvoiceForm">
           <template #icon>
             <img
               src="/icons/plus.svg"

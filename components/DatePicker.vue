@@ -147,7 +147,7 @@ const calendarDays = computed<CalendarDay[]>(() => {
 });
 
 const triggerClass = computed(() => [
-  "preset-heading-s-variant flex min-w-60 w-full items-center justify-between gap-4 rounded-[4px] border bg-white px-6 py-[18px] text-left text-brand-black transition-colors outline-none cursor-pointer dark:border-brand-dark-light dark:bg-brand-dark dark:text-white",
+  "preset-heading-s-variant flex min-w-0 w-full items-center justify-between gap-4 rounded-[4px] border bg-white px-6 py-[18px] text-left text-brand-black transition-colors outline-none cursor-pointer dark:border-brand-dark-light dark:bg-brand-dark dark:text-white",
   isOpen.value
     ? "border-brand-primary"
     : "border-brand-muted-light hover:border-brand-primary focus-visible:border-brand-primary",
@@ -230,7 +230,7 @@ onBeforeUnmount(() => {
 <template>
   <div
     ref="rootRef"
-    class="flex min-w-60 max-w-60 w-full flex-col gap-[9px]"
+    class="flex min-w-0 w-full flex-col gap-[9px]"
     @keydown.esc.prevent="handleEscape"
   >
     <label
@@ -241,7 +241,7 @@ onBeforeUnmount(() => {
       {{ label }}
     </label>
 
-    <div class="relative inline-block min-w-60 max-w-60 w-full">
+    <div class="relative inline-block min-w-0 w-full">
       <button
         :id="triggerId"
         type="button"
@@ -266,7 +266,7 @@ onBeforeUnmount(() => {
       <div
         v-if="isOpen"
         :id="calendarId"
-        class="absolute left-0 top-full z-10 mt-[24px] w-[240px] rounded-lg border border-brand-muted-light bg-white p-6 shadow-xl dark:border-brand-dark-light dark:bg-brand-dark-light"
+        class="absolute left-0 top-full z-10 mt-[24px] w-full max-w-[240px] rounded-lg border border-brand-muted-light bg-white p-6 shadow-xl dark:border-brand-dark-light dark:bg-brand-dark-light"
         role="dialog"
         :aria-labelledby="triggerId"
       >
