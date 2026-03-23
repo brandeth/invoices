@@ -6,7 +6,7 @@ export default defineEventHandler(() => {
       clientName: "Jensen Huang",
       amount: "$1,800.90",
       status: "paid",
-      to: "/",
+      to: "/invoices/RT3080",
     },
     {
       id: "XM9141",
@@ -14,7 +14,7 @@ export default defineEventHandler(() => {
       clientName: "Alex Grim",
       amount: "$556.00",
       status: "pending",
-      to: "/",
+      to: "/invoices/XM9141",
     },
     {
       id: "RG0314",
@@ -22,7 +22,7 @@ export default defineEventHandler(() => {
       clientName: "John Morrison",
       amount: "$14,002.33",
       status: "draft",
-      to: "/",
+      to: "/invoices/RG0314",
     },
     {
       id: "RT2080",
@@ -30,7 +30,7 @@ export default defineEventHandler(() => {
       clientName: "Samantha Lee",
       amount: "$1,024.00",
       status: "paid",
-      to: "/",
+      to: "/invoices/RT2080",
     },
     {
       id: "AA1449",
@@ -38,7 +38,7 @@ export default defineEventHandler(() => {
       clientName: "Oliver Grant",
       amount: "$3,110.44",
       status: "pending",
-      to: "/",
+      to: "/invoices/AA1449",
     },
     {
       id: "TY9141",
@@ -46,7 +46,7 @@ export default defineEventHandler(() => {
       clientName: "Emily Carter",
       amount: "$670.12",
       status: "draft",
-      to: "/",
+      to: "/invoices/TY9141",
     },
     {
       id: "FV2353",
@@ -54,7 +54,7 @@ export default defineEventHandler(() => {
       clientName: "Janet Weiss",
       amount: "$2,350.00",
       status: "paid",
-      to: "/",
+      to: "/invoices/FV2353",
     },
   ];
 });
