@@ -85,7 +85,9 @@ onBeforeUnmount(() => {
           <InvoiceForm />
         </div>
 
-        <main class="relative min-w-0 flex-1 overflow-y-auto px-6 py-10 sm:px-8">
+        <main
+          class="relative min-w-0 flex-1 overflow-y-auto px-6 py-10 sm:px-8"
+        >
           <NuxtPage />
         </main>
       </div>

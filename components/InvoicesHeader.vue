@@ -34,7 +34,9 @@ function openInvoiceForm() {
   <header class="w-full max-w-182.5 bg-transparent">
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:items-center">
       <div>
-        <h1 class="preset-heading-l text-brand-black dark:text-white">Invoices</h1>
+        <h1 class="preset-heading-l text-brand-black dark:text-white">
+          Invoices
+        </h1>
         <p
           class="preset-body mt-2 text-brand-muted dark:preset-body-variant dark:text-brand-muted-light"
         >

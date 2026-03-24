@@ -7,6 +7,7 @@ defineOptions({
 
 const props = defineProps<{
   label: string;
+  hideLabel?: boolean;
   id?: string;
   modelValue?: string | number;
 }>();
@@ -26,7 +27,16 @@ const inputAttrs = computed(() => {
   return rest;
 });
 
-const containerClass = computed(() => ["flex min-w-0 flex-col gap-[9px]", attrs.class]);
+const containerClass = computed(() => [
+  "flex min-w-0 flex-col gap-[9px]",
+  attrs.class,
+]);
+
+const labelClass = computed(() => [
+  "preset-body-variant text-brand-muted-dark dark:text-brand-muted-light",
+  props.hideLabel &&
+    "absolute h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [-webkit-clip-path:inset(50%)] [clip-path:inset(50%)] [-webkit-clip:rect(0,0,0,0)] [clip:rect(0,0,0,0)]",
+]);
 
 function handleInput(event: Event) {
   const target = event.target;
@@ -43,10 +53,7 @@ const inputClass = computed(() => [
 
 <template>
   <div :class="containerClass">
-    <label
-      :for="inputId"
-      class="preset-body-variant text-brand-muted-dark dark:text-brand-muted-light"
-    >
+    <label :for="inputId" :class="labelClass">
       {{ label }}
     </label>
 
