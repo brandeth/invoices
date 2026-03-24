@@ -307,7 +307,9 @@ function removeLineItem(id: number) {
                   class="min-w-0"
                 />
 
-                <div class="flex min-w-0 flex-col gap-2.25 md:justify-self-start">
+                <div
+                  class="flex min-w-0 flex-col gap-2.25 md:justify-self-start"
+                >
                   <span
                     class="absolute h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [-webkit-clip-path:inset(50%)] [clip-path:inset(50%)] [-webkit-clip:rect(0,0,0,0)] [clip:rect(0,0,0,0)] text-brand-muted-dark dark:text-brand-muted-light"
                   >
