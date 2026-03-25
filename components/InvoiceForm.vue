@@ -338,10 +338,12 @@ function handleSubmit() {
                       Total
                     </span>
 
-                    <div class="flex h-14 items-center">
-                      <span
-                        class="preset-heading-s-variant text-brand-muted-dark dark:text-brand-muted-light"
-                      >
+                    <div
+                      class="flex h-14 items-center preset-heading-s-variant text-brand-muted-dark dark:text-brand-muted-light"
+                    >
+                      <!-- currency symbol -->
+                      <span>$</span>
+                      <span>
                         {{ getLineItemTotal(item) }}
                       </span>
                     </div>
