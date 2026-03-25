@@ -23,6 +23,14 @@ function closeInvoiceForm() {
   isInvoiceFormOpen.value = false;
 }
 
+function handleInvoiceFormSaveDraft() {
+  closeInvoiceForm();
+}
+
+function handleInvoiceFormSubmit() {
+  closeInvoiceForm();
+}
+
 function handleDocumentPointerDown(event: PointerEvent) {
   if (!isInvoiceFormOpen.value || !invoiceFormRef.value) {
     return;
@@ -80,9 +88,13 @@ onBeforeUnmount(() => {
         <div
           ref="invoiceFormRef"
           v-if="isInvoiceFormOpen"
-          class="absolute left-[-103px] top-0 z-20 h-full"
+          class="absolute -left-25.75 top-0 z-20 h-full"
         >
-          <InvoiceForm />
+          <InvoiceForm
+            @close="closeInvoiceForm"
+            @save-draft="handleInvoiceFormSaveDraft"
+            @submit="handleInvoiceFormSubmit"
+          />
         </div>
 
         <main
