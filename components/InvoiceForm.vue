@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import {
+  createEmptyInvoiceFormValues,
+  type InvoiceFormInitialValues,
+} from "~/composables/useInvoiceFormState";
 import DatePicker from "./DatePicker.vue";
 import Dropdown from "./Dropdown.vue";
 import Input from "./Input.vue";
@@ -14,9 +18,13 @@ type LineItem = {
 const props = withDefaults(
   defineProps<{
     mode?: "create" | "edit";
+    invoiceId?: string | null;
+    initialValues?: InvoiceFormInitialValues | null;
   }>(),
   {
     mode: "create",
+    invoiceId: null,
+    initialValues: null,
   },
 );
 
@@ -26,9 +34,20 @@ const emit = defineEmits<{
   submit: [];
 }>();
 
-const title = computed(() =>
-  props.mode === "edit" ? "Edit Invoice" : "New Invoice",
-);
+const isEditMode = computed(() => props.mode === "edit");
+
+const title = computed(() => {
+  if (isEditMode.value && props.invoiceId) {
+    return `Edit #${props.invoiceId}`;
+  }
+
+  return "New Invoice";
+});
+
+const billFromStreetAddress = ref("");
+const billFromCity = ref("");
+const billFromPostCode = ref("");
+const billFromCountry = ref("");
 
 const billToClientName = ref("");
 const billToClientEmail = ref("");
@@ -41,7 +60,7 @@ const paymentTerms = ref<string | undefined>(undefined);
 const projectDescription = ref("");
 const nextLineItemId = ref(1);
 
-function createLineItem(): LineItem {
+function createLineItem(values?: Partial<Omit<LineItem, "id">>): LineItem {
   const id = nextLineItemId.value;
   nextLineItemId.value += 1;
 
@@ -50,10 +69,11 @@ function createLineItem(): LineItem {
     name: "",
     quantity: "1",
     price: "0",
+    ...values,
   };
 }
 
-const lineItems = ref<LineItem[]>([createLineItem(), createLineItem()]);
+const lineItems = ref<LineItem[]>([]);
 
 const paymentTermOptions = [
   { label: "Net 1 Day", value: "net-1" },
@@ -80,6 +100,42 @@ function getLineItemTotal(item: LineItem) {
 
   return (quantity * price).toFixed(2);
 }
+
+function buildDefaultFormValues() {
+  return createEmptyInvoiceFormValues();
+}
+
+function applyFormValues(values: InvoiceFormInitialValues | null | undefined) {
+  const formValues = values ?? buildDefaultFormValues();
+  const sourceLineItems =
+    formValues.lineItems.length > 0
+      ? formValues.lineItems
+      : buildDefaultFormValues().lineItems;
+
+  billFromStreetAddress.value = formValues.billFromStreetAddress;
+  billFromCity.value = formValues.billFromCity;
+  billFromPostCode.value = formValues.billFromPostCode;
+  billFromCountry.value = formValues.billFromCountry;
+  billToClientName.value = formValues.billToClientName;
+  billToClientEmail.value = formValues.billToClientEmail;
+  billToStreetAddress.value = formValues.billToStreetAddress;
+  billToCity.value = formValues.billToCity;
+  billToPostCode.value = formValues.billToPostCode;
+  billToCountry.value = formValues.billToCountry;
+  invoiceDate.value = formValues.invoiceDate;
+  paymentTerms.value = formValues.paymentTerms;
+  projectDescription.value = formValues.projectDescription;
+  nextLineItemId.value = 1;
+  lineItems.value = sourceLineItems.map((item) => createLineItem(item));
+}
+
+watch(
+  () => [props.mode, props.invoiceId, props.initialValues] as const,
+  ([, , values]) => {
+    applyFormValues(values);
+  },
+  { immediate: true },
+);
 
 function addLineItem() {
   lineItems.value.push(createLineItem());
@@ -135,6 +191,7 @@ function handleSubmit() {
               </h3>
 
               <Input
+                v-model="billFromStreetAddress"
                 label="Street Address"
                 name="billFromStreetAddress"
                 autocomplete="street-address"
@@ -143,6 +200,7 @@ function handleSubmit() {
 
               <div class="flex items-start gap-6">
                 <Input
+                  v-model="billFromCity"
                   label="City"
                   name="billFromCity"
                   autocomplete="address-level2"
@@ -150,6 +208,7 @@ function handleSubmit() {
                 />
 
                 <Input
+                  v-model="billFromPostCode"
                   label="Postal Code"
                   name="billFromPostalCode"
                   autocomplete="postal-code"
@@ -157,6 +216,7 @@ function handleSubmit() {
                 />
 
                 <Input
+                  v-model="billFromCountry"
                   label="Country"
                   name="billFromCountry"
                   autocomplete="country-name"
@@ -383,15 +443,29 @@ function handleSubmit() {
     <footer
       class="ml-25.75 shrink-0 bg-white shadow-sm dark:bg-brand-surface-dark"
     >
-      <div class="flex max-w-154 items-center justify-between gap-4 px-14 py-8">
-        <Button variant="secondary" @click="handleClose">Discard</Button>
+      <div
+        :class="[
+          'flex max-w-154 items-center gap-4 px-14 py-8',
+          isEditMode ? 'justify-end' : 'justify-between',
+        ]"
+      >
+        <template v-if="isEditMode">
+          <div class="flex items-center gap-2">
+            <Button variant="secondary" @click="handleClose">Cancel</Button>
+            <Button type="submit" form="invoice-form">Save Changes</Button>
+          </div>
+        </template>
 
-        <div class="flex items-center gap-2">
-          <Button variant="neutral" @click="handleSaveDraft">
-            Save as Draft
-          </Button>
-          <Button type="submit" form="invoice-form">Save &amp; Send</Button>
-        </div>
+        <template v-else>
+          <Button variant="secondary" @click="handleClose">Discard</Button>
+
+          <div class="flex items-center gap-2">
+            <Button variant="neutral" @click="handleSaveDraft">
+              Save as Draft
+            </Button>
+            <Button type="submit" form="invoice-form">Save &amp; Send</Button>
+          </div>
+        </template>
       </div>
     </footer>
   </aside>

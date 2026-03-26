@@ -7,6 +7,10 @@ type InvoiceStatus = "paid" | "pending" | "draft";
 defineProps<{
   status: InvoiceStatus;
 }>();
+
+defineEmits<{
+  edit: [];
+}>();
 </script>
 
 <template>
@@ -15,12 +19,15 @@ defineProps<{
     aria-label="Invoice status and actions"
   >
     <div class="flex items-center gap-5">
-      <span class="preset-body-variant text-[#858bb2] dark:text-brand-muted-light">Status</span>
+      <span
+        class="preset-body-variant text-[#858bb2] dark:text-brand-muted-light"
+        >Status</span
+      >
       <InvoiceStatusBadge :status="status" />
     </div>
 
     <div class="flex items-center gap-2">
-      <Button variant="secondary">Edit</Button>
+      <Button variant="secondary" @click="$emit('edit')">Edit</Button>
       <Button variant="danger">Delete</Button>
       <Button>Mark as Paid</Button>
     </div>

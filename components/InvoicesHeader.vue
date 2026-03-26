@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { useInvoiceFormState } from "~/composables/useInvoiceFormState";
 import Button from "./Button.vue";
 import Dropdown from "./Dropdown.vue";
 
-const isInvoiceFormOpen = useState<boolean>("invoice-form-open", () => false);
+const { openCreate: openInvoiceForm } = useInvoiceFormState();
 
 const props = defineProps<{
   totalInvoices: number;
@@ -23,10 +24,6 @@ function handleSelectedStatusesUpdate(value: string | string[]) {
   if (Array.isArray(value)) {
     emit("update:selectedStatuses", value);
   }
-}
-
-function openInvoiceForm() {
-  isInvoiceFormOpen.value = true;
 }
 </script>
 

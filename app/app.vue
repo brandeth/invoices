@@ -1,9 +1,16 @@
 <script setup lang="ts">
+import { useInvoiceFormState } from "~/composables/useInvoiceFormState";
 import InvoiceForm from "../components/InvoiceForm.vue";
 import Sidebar from "../components/Sidebar.vue";
 
 const isDark = useState<boolean>("color-theme", () => false);
-const isInvoiceFormOpen = useState<boolean>("invoice-form-open", () => false);
+const {
+  isOpen: isInvoiceFormOpen,
+  mode: invoiceFormMode,
+  invoiceId: invoiceFormInvoiceId,
+  initialValues: invoiceFormInitialValues,
+  clear: clearInvoiceForm,
+} = useInvoiceFormState();
 const invoiceFormRef = ref<HTMLElement | null>(null);
 const sidebarRef = ref<HTMLElement | null>(null);
 
@@ -20,7 +27,7 @@ function toggleTheme() {
 }
 
 function closeInvoiceForm() {
-  isInvoiceFormOpen.value = false;
+  clearInvoiceForm();
 }
 
 function handleInvoiceFormSaveDraft() {
@@ -91,6 +98,9 @@ onBeforeUnmount(() => {
           class="absolute -left-25.75 top-0 z-20 h-full"
         >
           <InvoiceForm
+            :mode="invoiceFormMode"
+            :invoice-id="invoiceFormInvoiceId"
+            :initial-values="invoiceFormInitialValues"
             @close="closeInvoiceForm"
             @save-draft="handleInvoiceFormSaveDraft"
             @submit="handleInvoiceFormSubmit"
