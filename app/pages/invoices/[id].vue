@@ -3,6 +3,7 @@ import {
   type InvoiceFormInitialValues,
   useInvoiceFormState,
 } from "~/composables/useInvoiceFormState";
+import ConfirmationDialog from "../../../components/ConfirmationDialog.vue";
 import InvoiceDetails from "../../../components/InvoiceDetails.vue";
 import StatusActionBar from "../../../components/StatusActionBar.vue";
 
@@ -40,6 +41,7 @@ type Invoice = {
 const route = useRoute();
 const invoiceId = String(route.params.id);
 const { openEdit: openEditInvoiceForm } = useInvoiceFormState();
+const isDeleteDialogOpen = ref(false);
 
 const { data: invoices } = await useFetch<Invoice[]>("/api/invoices", {
   default: () => [],
@@ -135,6 +137,18 @@ function mapInvoiceToFormValues(entry: Invoice): InvoiceFormInitialValues {
 function handleEdit() {
   openEditInvoiceForm(invoice.id, mapInvoiceToFormValues(invoice));
 }
+
+function openDeleteDialog() {
+  isDeleteDialogOpen.value = true;
+}
+
+function closeDeleteDialog() {
+  isDeleteDialogOpen.value = false;
+}
+
+function confirmDelete() {
+  closeDeleteDialog();
+}
 </script>
 
 <template>
@@ -154,7 +168,11 @@ function handleEdit() {
       </NuxtLink>
     </header>
 
-    <StatusActionBar :status="invoice.status" @edit="handleEdit" />
+    <StatusActionBar
+      :status="invoice.status"
+      @delete="openDeleteDialog"
+      @edit="handleEdit"
+    />
 
     <InvoiceDetails
       :id="invoice.id"
@@ -167,6 +185,15 @@ function handleEdit() {
       :sender-address="invoice.senderAddress"
       :client-address="invoice.clientAddress"
       :items="invoice.items"
+    />
+
+    <ConfirmationDialog
+      :open="isDeleteDialogOpen"
+      title="Confirm Deletion"
+      :description="`Are you sure you want to delete invoice #${invoice.id}? This action cannot be undone.`"
+      @cancel="closeDeleteDialog"
+      @close="closeDeleteDialog"
+      @confirm="confirmDelete"
     />
   </div>
 </template>

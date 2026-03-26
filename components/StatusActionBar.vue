@@ -10,6 +10,7 @@ defineProps<{
 
 defineEmits<{
   edit: [];
+  delete: [];
 }>();
 </script>
 
@@ -28,7 +29,7 @@ defineEmits<{
 
     <div class="flex items-center gap-2">
       <Button variant="secondary" @click="$emit('edit')">Edit</Button>
-      <Button variant="danger">Delete</Button>
+      <Button variant="danger" @click="$emit('delete')">Delete</Button>
       <Button>Mark as Paid</Button>
     </div>
   </section>
