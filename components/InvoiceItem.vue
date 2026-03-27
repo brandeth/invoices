@@ -15,32 +15,46 @@ const props = defineProps<{
 
 <template>
   <article
-    class="grid grid-cols-[auto_auto_1fr_auto_104px_auto] items-center gap-x-6 rounded-lg bg-white px-8 pt-[14.5px] pb-[14.5px] shadow-[0_10px_10px_-10px_rgba(72,84,159,0.100397)] dark:bg-brand-dark"
+    class="grid grid-cols-[auto_auto_minmax(0,1fr)_auto_104px_auto] items-center gap-x-6 rounded-lg bg-white px-8 pt-[14.5px] pb-[14.5px] shadow-[0_10px_10px_-10px_rgba(72,84,159,0.100397)] md:max-xl:gap-x-5 md:max-xl:px-6 md:max-xl:py-6 dark:bg-brand-dark"
   >
-    <p class="preset-heading-s-variant whitespace-nowrap text-brand-black dark:text-white">
+    <p
+      class="preset-heading-s-variant whitespace-nowrap text-brand-black dark:text-white"
+    >
       <span class="text-brand-muted-dark">#</span>{{ props.id }}
     </p>
 
-    <p class="preset-body-variant whitespace-nowrap text-brand-muted-dark dark:text-brand-muted-light">
-      <span class="text-brand-muted dark:text-brand-muted">Due </span>{{ props.dueDate }}
+    <p
+      class="preset-body-variant whitespace-nowrap text-brand-muted-dark dark:text-brand-muted-light"
+    >
+      <span class="text-brand-muted dark:text-brand-muted">Due </span
+      >{{ props.dueDate }}
     </p>
 
-    <p class="preset-body-variant min-w-0 truncate text-[#858bb2] dark:text-brand-muted-light">
+    <p
+      class="preset-body-variant min-w-0 truncate text-[#858bb2] dark:text-brand-muted-light"
+    >
       {{ props.clientName }}
     </p>
 
-    <p class="preset-heading-s whitespace-nowrap text-brand-black dark:text-white">
+    <p
+      class="preset-heading-s whitespace-nowrap text-brand-black dark:text-white"
+    >
       {{ props.amount }}
     </p>
 
-    <InvoiceStatusBadge :status="props.status" />
+    <InvoiceStatusBadge :status="props.status" class="justify-self-end" />
 
     <NuxtLink
       :to="props.to"
-      class="flex h-6 w-6 items-center justify-center text-brand-muted-dark transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+      class="flex h-6 w-6 justify-self-end items-center justify-center text-brand-muted-dark transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
       :aria-label="`View invoice ${props.id}`"
     >
-      <img src="/icons/right-arrow.svg" alt="" aria-hidden="true" class="h-3 w-2" />
+      <img
+        src="/icons/right-arrow.svg"
+        alt=""
+        aria-hidden="true"
+        class="h-3 w-2"
+      />
     </NuxtLink>
   </article>
 </template>

@@ -31,7 +31,9 @@ const hasInvoicesToDisplay = computed(() => filteredInvoices.value.length > 0);
 </script>
 
 <template>
-  <div class="mx-auto w-full max-w-182.5 space-y-16">
+  <div
+    class="mx-auto w-full max-w-182.5 space-y-16 md:max-xl:max-w-[42rem] md:max-xl:space-y-14"
+  >
     <InvoicesHeader
       :total-invoices="totalInvoices"
       :selected-statuses="selectedStatuses"
@@ -52,7 +54,10 @@ const hasInvoicesToDisplay = computed(() => filteredInvoices.value.length > 0);
         />
       </template>
 
-      <div v-else class="flex min-h-[calc(100vh-16rem)] items-center justify-center">
+      <div
+        v-else
+        class="flex min-h-[calc(100vh-16rem)] items-center justify-center"
+      >
         <EmptyState />
       </div>
     </section>

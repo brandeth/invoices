@@ -165,10 +165,10 @@ function handleSubmit() {
 
 <template>
   <aside
-    class="flex h-full w-179.75 shrink-0 flex-col overflow-hidden rounded-r-[20px] bg-white dark:bg-brand-surface-dark"
+    class="flex h-full w-179.75 shrink-0 flex-col overflow-hidden rounded-r-[20px] bg-white md:max-xl:w-154 md:max-xl:rounded-r-[20px] dark:bg-brand-surface-dark"
     aria-label="Invoice form"
   >
-    <div class="ml-25.75 flex-1 overflow-y-auto">
+    <div class="ml-25.75 flex-1 overflow-y-auto md:max-xl:ml-0">
       <div class="max-w-154 space-y-12 px-14 py-14">
         <header>
           <h2 class="preset-heading-m text-brand-black dark:text-white">
@@ -441,7 +441,7 @@ function handleSubmit() {
     </div>
 
     <footer
-      class="ml-25.75 shrink-0 bg-white shadow-sm dark:bg-brand-surface-dark"
+      class="ml-25.75 shrink-0 bg-white shadow-sm md:max-xl:ml-0 dark:bg-brand-surface-dark"
     >
       <div
         :class="[

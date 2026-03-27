@@ -79,8 +79,8 @@ onBeforeUnmount(() => {
   >
     <NuxtRouteAnnouncer />
 
-    <div class="flex h-full gap-0">
-      <div ref="sidebarRef" class="relative z-30">
+    <div class="flex h-full gap-0 md:max-xl:flex-col xl:flex-row">
+      <div ref="sidebarRef" class="relative z-30 md:max-xl:w-full">
         <Sidebar :is-dark="isDark" @toggle-theme="toggleTheme" />
       </div>
 
@@ -95,7 +95,7 @@ onBeforeUnmount(() => {
         <div
           ref="invoiceFormRef"
           v-if="isInvoiceFormOpen"
-          class="absolute -left-25.75 top-0 z-20 h-full"
+          class="absolute -left-25.75 top-0 z-20 h-full md:max-xl:left-0"
         >
           <InvoiceForm
             :mode="invoiceFormMode"
@@ -108,7 +108,7 @@ onBeforeUnmount(() => {
         </div>
 
         <main
-          class="relative min-w-0 flex-1 overflow-y-auto px-6 py-10 sm:px-8"
+          class="relative min-w-0 flex-1 overflow-y-auto px-6 py-10 sm:px-8 md:max-xl:px-12 md:max-xl:pt-14 md:max-xl:pb-12"
         >
           <NuxtPage />
         </main>
