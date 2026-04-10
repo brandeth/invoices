@@ -165,12 +165,27 @@ function handleSubmit() {
 
 <template>
   <aside
-    class="flex h-full w-179.75 shrink-0 flex-col overflow-hidden rounded-r-[20px] bg-white md:max-xl:w-154 md:max-xl:rounded-r-[20px] dark:bg-brand-surface-dark"
+    class="flex h-full w-full shrink-0 flex-col overflow-hidden bg-white sm:w-179.75 sm:rounded-r-[20px] md:max-xl:w-154 md:max-xl:rounded-r-[20px] dark:bg-brand-surface-dark"
     aria-label="Invoice form"
   >
-    <div class="ml-25.75 flex-1 overflow-y-auto md:max-xl:ml-0">
-      <div class="max-w-154 space-y-12 px-14 py-14">
-        <header>
+    <div class="flex-1 overflow-y-auto sm:ml-25.75 md:max-xl:ml-0">
+      <div
+        class="max-w-154 space-y-6 px-6 py-8 sm:space-y-12 sm:px-14 sm:py-14"
+      >
+        <header class="space-y-8">
+          <button
+            type="button"
+            class="preset-heading-s-variant inline-flex items-center gap-6 text-brand-black transition-opacity hover:opacity-70 sm:hidden dark:text-white"
+            @click="handleClose"
+          >
+            <img
+              src="/icons/left-arrow.svg"
+              alt=""
+              aria-hidden="true"
+              class="h-2.5 w-2"
+            />
+            Go back
+          </button>
           <h2 class="preset-heading-m text-brand-black dark:text-white">
             {{ title }}
           </h2>
@@ -198,13 +213,13 @@ function handleSubmit() {
                 class="min-w-0 w-full"
               />
 
-              <div class="flex items-start gap-6">
+              <div class="grid grid-cols-2 gap-6 sm:grid-cols-3">
                 <Input
                   v-model="billFromCity"
                   label="City"
                   name="billFromCity"
                   autocomplete="address-level2"
-                  class="min-w-0 flex-1"
+                  class="min-w-0"
                 />
 
                 <Input
@@ -212,7 +227,7 @@ function handleSubmit() {
                   label="Postal Code"
                   name="billFromPostalCode"
                   autocomplete="postal-code"
-                  class="min-w-0 flex-1"
+                  class="min-w-0"
                 />
 
                 <Input
@@ -220,7 +235,7 @@ function handleSubmit() {
                   label="Country"
                   name="billFromCountry"
                   autocomplete="country-name"
-                  class="min-w-0 flex-1"
+                  class="col-span-2 min-w-0 sm:col-span-1"
                 />
               </div>
             </div>
@@ -260,13 +275,13 @@ function handleSubmit() {
                 class="min-w-0 w-full"
               />
 
-              <div class="flex items-start gap-6">
+              <div class="grid grid-cols-2 gap-6 sm:grid-cols-3">
                 <Input
                   v-model="billToCity"
                   label="City"
                   name="billToCity"
                   autocomplete="address-level2"
-                  class="min-w-0 flex-1"
+                  class="min-w-0"
                 />
 
                 <Input
@@ -274,7 +289,7 @@ function handleSubmit() {
                   label="Post Code"
                   name="billToPostCode"
                   autocomplete="postal-code"
-                  class="min-w-0 flex-1"
+                  class="min-w-0"
                 />
 
                 <Input
@@ -282,16 +297,16 @@ function handleSubmit() {
                   label="Country"
                   name="billToCountry"
                   autocomplete="country-name"
-                  class="min-w-0 flex-1"
+                  class="col-span-2 min-w-0 sm:col-span-1"
                 />
               </div>
 
-              <div class="flex items-start gap-6">
+              <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
                 <DatePicker
                   v-model="invoiceDate"
                   label="Invoice Date"
                   placeholder="Select a date"
-                  class="min-w-0 flex-1"
+                  class="min-w-0 w-full sm:w-auto sm:flex-1"
                 />
 
                 <Dropdown
@@ -299,7 +314,7 @@ function handleSubmit() {
                   label="Payment Terms"
                   placeholder="Select payment terms"
                   :options="paymentTermOptions"
-                  class="min-w-0 flex-1"
+                  class="min-w-0 w-full sm:w-auto sm:flex-1"
                   @update:model-value="handlePaymentTermsUpdate"
                 />
               </div>
@@ -350,50 +365,47 @@ function handleSubmit() {
                 <span />
               </div>
 
-              <div>
+              <div class="space-y-10 md:space-y-0">
                 <div
                   v-for="(item, index) in lineItems"
                   :key="item.id"
-                  class="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_72px_112px_minmax(72px,max-content)_40px] md:items-start"
+                  class="grid grid-cols-[64px_minmax(0,1fr)_auto_40px] gap-4 md:grid-cols-[minmax(0,1fr)_72px_112px_minmax(72px,max-content)_40px] md:items-start"
                 >
                   <Input
                     v-model="item.name"
                     label="Item Name"
-                    hide-label
                     :name="`lineItemName-${item.id}`"
                     autocomplete="off"
-                    class="min-w-0"
+                    class="col-span-full min-w-0 md:col-span-1 md:[&>label]:hidden"
                   />
 
                   <Input
                     v-model="item.quantity"
                     label="Qty."
-                    hide-label
                     :name="`lineItemQuantity-${item.id}`"
                     type="number"
                     min="0"
                     step="1"
                     inputmode="numeric"
-                    class="min-w-0"
+                    class="min-w-0 md:[&>label]:hidden"
                   />
 
                   <Input
                     v-model="item.price"
                     label="Price"
-                    hide-label
                     :name="`lineItemPrice-${item.id}`"
                     type="number"
                     min="0"
                     step="0.01"
                     inputmode="decimal"
-                    class="min-w-0"
+                    class="min-w-0 md:[&>label]:hidden"
                   />
 
                   <div
                     class="flex min-w-0 flex-col gap-2.25 md:justify-self-start"
                   >
                     <span
-                      class="absolute h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [-webkit-clip-path:inset(50%)] [clip-path:inset(50%)] [-webkit-clip:rect(0,0,0,0)] [clip:rect(0,0,0,0)] text-brand-muted-dark dark:text-brand-muted-light"
+                      class="preset-body-variant text-brand-muted-dark md:sr-only dark:text-brand-muted-light"
                     >
                       Total
                     </span>
@@ -441,12 +453,12 @@ function handleSubmit() {
     </div>
 
     <footer
-      class="ml-25.75 shrink-0 bg-white shadow-sm md:max-xl:ml-0 dark:bg-brand-surface-dark"
+      class="shrink-0 bg-white shadow-[0_-10px_10px_-10px_rgba(72,84,159,0.1)] sm:ml-25.75 md:max-xl:ml-0 dark:bg-brand-dark"
     >
       <div
         :class="[
-          'flex max-w-154 items-center gap-4 px-14 py-8',
-          isEditMode ? 'justify-end' : 'justify-between',
+          'flex max-w-154 flex-wrap items-center justify-center gap-2 px-6 py-5 sm:flex-nowrap sm:gap-4 sm:px-14 sm:py-8',
+          isEditMode ? 'sm:justify-end' : 'sm:justify-between',
         ]"
       >
         <template v-if="isEditMode">

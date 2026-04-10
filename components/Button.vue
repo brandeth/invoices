@@ -39,7 +39,7 @@ const rootVariantClassMap: Record<ButtonVariant, string> = {
 };
 
 const contentVariantClassMap: Record<ButtonVariant, string> = {
-  default: "gap-[16px]",
+  default: "gap-2 sm:gap-[16px]",
   secondary: "gap-[16px]",
   neutral: "gap-[16px]",
   danger: "gap-[16px]",
@@ -59,11 +59,11 @@ const buttonPaddingClass = computed(() => {
     return hasIcon.value ? "px-6" : "px-8";
   }
 
-  return hasIcon.value ? "pl-2 pr-6" : "px-6";
+  return hasIcon.value ? "pl-2 pr-4 sm:pr-6" : "px-4 sm:px-6";
 });
 
 const buttonClass = computed(() => [
-  "group preset-heading-s-variant inline-flex h-12 items-center rounded-full transition-colors",
+  "group preset-heading-s-variant inline-flex h-12 items-center whitespace-nowrap rounded-full transition-colors",
   rootVariantClassMap[props.variant],
   props.disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer",
   buttonPaddingClass.value,

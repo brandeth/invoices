@@ -32,7 +32,7 @@ const hasInvoicesToDisplay = computed(() => filteredInvoices.value.length > 0);
 
 <template>
   <div
-    class="mx-auto w-full max-w-182.5 space-y-16 md:max-xl:max-w-[42rem] md:max-xl:space-y-14"
+    class="mx-auto w-full max-w-182.5 space-y-8 sm:space-y-16 md:max-xl:max-w-[42rem] md:max-xl:space-y-14"
   >
     <InvoicesHeader
       :total-invoices="totalInvoices"

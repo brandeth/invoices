@@ -20,6 +20,22 @@ const statusOptions = [
   { label: "Paid", value: "paid" },
 ];
 
+const isSmScreen = ref(true);
+
+onMounted(() => {
+  const mql = window.matchMedia("(min-width: 640px)");
+  isSmScreen.value = mql.matches;
+  const handler = (e: MediaQueryListEvent) => {
+    isSmScreen.value = e.matches;
+  };
+  mql.addEventListener("change", handler);
+  onBeforeUnmount(() => mql.removeEventListener("change", handler));
+});
+
+const filterPlaceholder = computed(() =>
+  isSmScreen.value ? "Filter by status" : "Filter",
+);
+
 function handleSelectedStatusesUpdate(value: string | string[]) {
   if (Array.isArray(value)) {
     emit("update:selectedStatuses", value);
@@ -29,29 +45,29 @@ function handleSelectedStatusesUpdate(value: string | string[]) {
 
 <template>
   <header class="w-full max-w-182.5 bg-transparent">
-    <div
-      class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:items-center md:max-xl:grid-cols-[minmax(0,1fr)_1fr] md:max-xl:items-end md:max-xl:gap-10"
-    >
+    <div class="flex items-center justify-between gap-4 md:max-xl:gap-10">
       <div class="min-w-0">
-        <h1 class="preset-heading-l text-brand-black dark:text-white">
+        <h1
+          class="preset-heading-m sm:preset-heading-l text-brand-black dark:text-white"
+        >
           Invoices
         </h1>
         <p
           class="preset-body mt-2 text-brand-muted dark:preset-body-variant dark:text-brand-muted-light"
         >
-          There are {{ props.totalInvoices }} of invoices
+          <span class="hidden sm:inline">There are </span
+          >{{ props.totalInvoices
+          }}<span class="hidden sm:inline"> total</span> invoices
         </p>
       </div>
 
-      <div
-        class="flex items-center justify-start gap-4 sm:justify-end md:max-xl:shrink-0 md:max-xl:flex-nowrap md:max-xl:gap-5"
-      >
+      <div class="flex items-center gap-4 md:max-xl:gap-5">
         <Dropdown
           :model-value="props.selectedStatuses"
           :options="statusOptions"
           variant="status-filter"
           multiple
-          placeholder="Filter by status"
+          :placeholder="filterPlaceholder"
           @update:model-value="handleSelectedStatusesUpdate"
         />
 
@@ -64,7 +80,7 @@ function handleSelectedStatusesUpdate(value: string | string[]) {
               aria-hidden="true"
             />
           </template>
-          New Invoice
+          New<span class="hidden sm:inline">&nbsp;Invoice</span>
         </Button>
       </div>
     </div>

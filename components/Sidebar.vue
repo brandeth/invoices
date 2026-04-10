@@ -12,12 +12,12 @@ const emit = defineEmits<{
 
 <template>
   <aside
-    class="sticky top-0 flex h-screen w-25.75 shrink-0 flex-col overflow-hidden rounded-r-[20px] md:max-xl:h-20 md:max-xl:w-full md:max-xl:flex-row md:max-xl:items-stretch md:max-xl:justify-between md:max-xl:rounded-none"
+    class="sticky top-0 flex h-screen w-25.75 shrink-0 flex-col overflow-hidden rounded-r-[20px] max-xl:h-20 max-xl:w-full max-xl:flex-row max-xl:items-stretch max-xl:justify-between max-xl:rounded-none"
     :class="isDark ? 'bg-brand-dark' : 'bg-[#373b53]'"
     aria-label="Sidebar"
   >
     <div
-      class="relative h-25.75 w-25.75 overflow-hidden rounded-r-[20px] md:max-xl:h-20 md:max-xl:w-20 md:max-xl:rounded-r-[20px]"
+      class="relative h-25.75 w-25.75 overflow-hidden rounded-r-[20px] max-xl:h-20 max-xl:w-20 max-xl:rounded-r-[20px]"
     >
       <div class="absolute inset-x-0 top-0 h-full bg-brand-primary" />
       <div
@@ -28,16 +28,16 @@ const emit = defineEmits<{
         <img
           src="/icons/logo-light.svg"
           alt="Invoices logo"
-          class="h-10 w-10 md:max-xl:h-8 md:max-xl:w-8"
+          class="h-10 w-10 max-xl:h-8 max-xl:w-8"
         />
       </div>
     </div>
 
     <div
-      class="mt-auto flex flex-col md:max-xl:mt-0 md:max-xl:ml-auto md:max-xl:flex-row md:max-xl:items-center"
+      class="mt-auto flex flex-col max-xl:mt-0 max-xl:ml-auto max-xl:flex-row max-xl:items-center"
     >
       <div
-        class="flex items-center justify-center py-6 md:max-xl:h-full md:max-xl:px-8 md:max-xl:py-0"
+        class="flex items-center justify-center py-6 max-xl:h-full max-xl:px-4 sm:max-xl:px-8 max-xl:py-0"
       >
         <button
           type="button"
@@ -63,7 +63,7 @@ const emit = defineEmits<{
       </div>
 
       <div
-        class="flex items-center justify-center border-t border-[#494e6e] py-6 md:max-xl:h-full md:max-xl:border-t-0 md:max-xl:border-l md:max-xl:px-6 md:max-xl:py-0"
+        class="flex items-center justify-center border-t border-[#494e6e] py-6 max-xl:h-full max-xl:border-t-0 max-xl:border-l max-xl:px-4 sm:max-xl:px-6 max-xl:py-0"
       >
         <img
           src="/images/profile-picture.jpg"
