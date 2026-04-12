@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@lucide/vue": "^1.0.0-rc.0",
+    "@nuxtjs/supabase": "^2.0.5",
     "@tailwindcss/vite": "^4.2.2",
     "nuxt": "^4.4.2",
     "tailwindcss": "^4.2.2",

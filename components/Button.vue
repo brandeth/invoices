@@ -87,7 +87,7 @@ const iconWrapperClass = computed(() => [
         <slot name="icon" />
       </span>
 
-      <span class="preset-heading-s-variant h-3">
+      <span class="preset-heading-s-variant">
         <slot />
       </span>
     </span>

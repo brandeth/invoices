@@ -3,9 +3,9 @@ import {
   type InvoiceFormInitialValues,
   useInvoiceFormState,
 } from "~/composables/useInvoiceFormState";
-import ConfirmationDialog from "../../../components/ConfirmationDialog.vue";
-import InvoiceDetails from "../../../components/InvoiceDetails.vue";
-import StatusActionBar from "../../../components/StatusActionBar.vue";
+import ConfirmationDialog from "../../../../components/ConfirmationDialog.vue";
+import InvoiceDetails from "../../../../components/InvoiceDetails.vue";
+import StatusActionBar from "../../../../components/StatusActionBar.vue";
 
 type Invoice = {
   id: string;
@@ -155,7 +155,7 @@ function confirmDelete() {
   <div class="mx-auto flex w-full max-w-182.5 flex-col gap-8">
     <header>
       <NuxtLink
-        to="/dashboard"
+        to="/demo"
         class="inline-flex items-center gap-6 text-brand-black transition-opacity hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary dark:text-white"
       >
         <img

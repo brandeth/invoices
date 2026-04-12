@@ -9,6 +9,7 @@ const props = defineProps<{
   label: string;
   hideLabel?: boolean;
   id?: string;
+  type?: string;
   modelValue?: string | number;
 }>();
 
@@ -59,6 +60,7 @@ const inputClass = computed(() => [
 
     <input
       :id="inputId"
+      :type="props.type || 'text'"
       :value="props.modelValue"
       v-bind="inputAttrs"
       :class="inputClass"
