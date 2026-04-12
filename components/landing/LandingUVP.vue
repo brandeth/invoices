@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MousePointerClick, Zap, Cloud, Moon } from "@lucide/vue";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const cards = [
   {
@@ -27,27 +31,83 @@ const cards = [
       "Work late without the glare. Toggle between light and dark themes with one click.",
   },
 ];
+
+const sectionRef = ref<HTMLElement | null>(null);
+const scrollContainer = inject<Ref<HTMLElement | null>>('landing-scroll-container');
+let ctx: gsap.Context;
+
+onMounted(() => {
+  ctx = gsap.context(() => {
+    gsap.set(".uvp-label", { opacity: 0, y: 30 });
+    gsap.set(".uvp-heading", { opacity: 0, y: 40 });
+    gsap.set(".uvp-card", { opacity: 0, y: 60 });
+
+    gsap.to(".uvp-label", {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: sectionRef.value,
+        start: "top 85%",
+        once: true,
+        scroller: scrollContainer?.value,
+      },
+    });
+
+    gsap.to(".uvp-heading", {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: sectionRef.value,
+        start: "top 85%",
+        once: true,
+        scroller: scrollContainer?.value,
+      },
+    });
+
+    gsap.to(".uvp-card", {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      stagger: 0.12,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".uvp-grid",
+        start: "top 85%",
+        once: true,
+        scroller: scrollContainer?.value,
+      },
+    });
+  }, sectionRef.value!);
+});
+
+onUnmounted(() => {
+  ctx?.revert();
+});
 </script>
 
 <template>
-  <section class="bg-white dark:bg-brand-dark py-20 sm:py-28">
+  <section ref="sectionRef" class="bg-white dark:bg-brand-dark py-20 sm:py-28">
     <div class="max-w-7xl mx-auto px-6 sm:px-8">
       <p
-        class="preset-body font-bold uppercase tracking-widest text-brand-primary mb-4 text-center"
+        class="uvp-label preset-body font-bold uppercase tracking-widest text-brand-primary mb-4 text-center"
       >
         Why Invoices?
       </p>
       <h2
-        class="text-[28px] sm:text-[32px] font-bold text-brand-black dark:text-white text-center"
+        class="uvp-heading text-[28px] sm:text-[32px] font-bold text-brand-black dark:text-white text-center"
       >
         Everything you need. Nothing you don't.
       </h2>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+      <div class="uvp-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
         <div
           v-for="card in cards"
           :key="card.title"
-          class="p-6 rounded-xl bg-brand-background dark:bg-brand-dark-light group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+          class="uvp-card p-6 rounded-xl bg-brand-background dark:bg-brand-dark-light group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
         >
           <div
             class="h-12 w-12 rounded-xl bg-brand-primary/10 flex items-center justify-center mb-4"

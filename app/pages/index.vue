@@ -8,7 +8,7 @@ definePageMeta({
   <div class="bg-white dark:bg-brand-surface-dark">
     <LandingNav />
     <main>
-      <LandingHero />
+      <LandingHeroAlt />
       <LandingUVP />
       <LandingFeatures />
       <LandingSocialProof />

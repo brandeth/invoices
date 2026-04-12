@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronDown } from "@lucide/vue";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const openIndex = ref<number | null>(null);
 
@@ -39,35 +43,80 @@ const faqs = [
       "Reach out via email at support@invoices.app. We typically respond within 24 hours.",
   },
 ];
+
+const sectionRef = ref<HTMLElement | null>(null);
+const scrollContainer = inject<Ref<HTMLElement | null>>('landing-scroll-container');
+let ctx: gsap.Context;
+
+onMounted(() => {
+  ctx = gsap.context(() => {
+    gsap.set(".faq-header", { opacity: 0, y: 30 });
+    gsap.set(".faq-item", { opacity: 0, y: 20 });
+
+    gsap.to(".faq-header", {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: sectionRef.value,
+        start: "top 85%",
+        once: true,
+        scroller: scrollContainer?.value,
+      },
+    });
+
+    gsap.to(".faq-item", {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.08,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".faq-list",
+        start: "top 85%",
+        once: true,
+        scroller: scrollContainer?.value,
+      },
+    });
+  }, sectionRef.value!);
+});
+
+onUnmounted(() => {
+  ctx?.revert();
+});
 </script>
 
 <template>
   <section
+    ref="sectionRef"
     id="faq"
     class="bg-brand-background dark:bg-brand-surface-dark py-20 sm:py-28"
   >
     <div class="max-w-7xl mx-auto px-6 sm:px-8">
-      <p
-        class="preset-body font-bold uppercase tracking-widest text-brand-primary mb-4 text-center"
-      >
-        FAQ
-      </p>
-      <h2
-        class="text-[28px] sm:text-[32px] font-bold text-brand-black dark:text-white text-center"
-      >
-        Frequently asked questions
-      </h2>
-      <p
-        class="text-base text-brand-muted dark:text-brand-muted-light mt-3 text-center"
-      >
-        Everything you need to know to get started.
-      </p>
+      <div class="faq-header">
+        <p
+          class="preset-body font-bold uppercase tracking-widest text-brand-primary mb-4 text-center"
+        >
+          FAQ
+        </p>
+        <h2
+          class="text-[28px] sm:text-[32px] font-bold text-brand-black dark:text-white text-center"
+        >
+          Frequently asked questions
+        </h2>
+        <p
+          class="text-base text-brand-muted dark:text-brand-muted-light mt-3 text-center"
+        >
+          Everything you need to know to get started.
+        </p>
+      </div>
 
-      <div class="max-w-2xl mx-auto mt-12">
+      <div class="faq-list max-w-2xl mx-auto mt-12">
         <div
           v-for="(faq, index) in faqs"
           :key="index"
-          class="border-b border-brand-muted-light/30 dark:border-brand-dark-light"
+          class="faq-item border-b border-brand-muted-light/30 dark:border-brand-dark-light"
         >
           <button
             class="flex justify-between items-center w-full py-5 cursor-pointer group text-left"
