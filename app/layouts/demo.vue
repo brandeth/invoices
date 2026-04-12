@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { useInvoiceFormState } from "~/composables/useInvoiceFormState";
+import {
+  useDemoInvoices,
+  type InvoiceFormData,
+} from "~/composables/useDemoInvoices";
 import InvoiceForm from "../../components/InvoiceForm.vue";
 import Sidebar from "../../components/Sidebar.vue";
 
 const isDark = useState<boolean>("color-theme");
-const client = useSupabaseClient();
+const { addInvoice, updateInvoice } = useDemoInvoices();
 
 const {
   isOpen: isInvoiceFormOpen,
@@ -24,11 +28,21 @@ function closeInvoiceForm() {
   clearInvoiceForm();
 }
 
-function handleInvoiceFormSaveDraft(_data: Record<string, unknown>) {
+function handleInvoiceFormSaveDraft(data: InvoiceFormData) {
+  if (invoiceFormMode.value === "edit" && invoiceFormInvoiceId.value) {
+    updateInvoice(invoiceFormInvoiceId.value, data);
+  } else {
+    addInvoice(data, "draft");
+  }
   closeInvoiceForm();
 }
 
-function handleInvoiceFormSubmit(_data: Record<string, unknown>) {
+function handleInvoiceFormSubmit(data: InvoiceFormData) {
+  if (invoiceFormMode.value === "edit" && invoiceFormInvoiceId.value) {
+    updateInvoice(invoiceFormInvoiceId.value, data);
+  } else {
+    addInvoice(data, "pending");
+  }
   closeInvoiceForm();
 }
 
@@ -56,11 +70,6 @@ function handleDocumentKeydown(event: KeyboardEvent) {
   }
 }
 
-async function handleLogout() {
-  await client.auth.signOut();
-  navigateTo("/login");
-}
-
 onMounted(() => {
   document.addEventListener("pointerdown", handleDocumentPointerDown);
   document.addEventListener("keydown", handleDocumentKeydown);
@@ -75,11 +84,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="flex h-full gap-0 max-xl:flex-col xl:flex-row">
     <div ref="sidebarRef" class="relative z-30 max-xl:w-full max-xl:shadow-md">
-      <Sidebar
-        :is-dark="isDark"
-        @toggle-theme="toggleTheme"
-        @logout="handleLogout"
-      />
+      <Sidebar :is-dark="isDark" @toggle-theme="toggleTheme" />
     </div>
 
     <div class="relative flex min-h-0 min-w-0 flex-1">

@@ -5,7 +5,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="bg-white dark:bg-brand-surface-dark">
     <LandingNav />
     <main>
       <LandingHero />

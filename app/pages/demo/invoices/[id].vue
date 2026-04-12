@@ -3,58 +3,36 @@ import {
   type InvoiceFormInitialValues,
   useInvoiceFormState,
 } from "~/composables/useInvoiceFormState";
+import {
+  useDemoInvoices,
+  type DemoInvoice,
+} from "~/composables/useDemoInvoices";
 import ConfirmationDialog from "../../../../components/ConfirmationDialog.vue";
 import InvoiceDetails from "../../../../components/InvoiceDetails.vue";
 import StatusActionBar from "../../../../components/StatusActionBar.vue";
 
-type Invoice = {
-  id: string;
-  title: string;
-  invoiceDate: string;
-  paymentDue: string;
-  dueDate: string;
-  clientName: string;
-  clientEmail: string;
-  amount: string;
-  status: "paid" | "pending" | "draft";
-  senderAddress: {
-    street: string;
-    city: string;
-    postCode: string;
-    country: string;
-  };
-  clientAddress: {
-    street: string;
-    city: string;
-    postCode: string;
-    country: string;
-  };
-  items: Array<{
-    name: string;
-    quantity: number;
-    price: string;
-    total: string;
-  }>;
-  to: string;
-};
+definePageMeta({ layout: "demo" });
 
 const route = useRoute();
+const router = useRouter();
 const invoiceId = String(route.params.id);
 const { openEdit: openEditInvoiceForm } = useInvoiceFormState();
+const { getById, deleteInvoice } = useDemoInvoices();
 const isDeleteDialogOpen = ref(false);
 
-const { data: invoices } = await useFetch<Invoice[]>("/api/invoices", {
-  default: () => [],
+const invoice = computed(() => getById(invoiceId));
+
+const isHydrated = ref(false);
+
+onMounted(() => {
+  isHydrated.value = true;
+  if (!invoice.value) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Invoice not found",
+    });
+  }
 });
-
-const invoice = invoices.value.find((entry) => entry.id === invoiceId);
-
-if (!invoice) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: "Invoice not found",
-  });
-}
 
 const displayMonthMap: Record<string, number> = {
   Jan: 1,
@@ -111,7 +89,7 @@ function derivePaymentTerms(invoiceDateValue: string, paymentDueValue: string) {
   return [1, 7, 14, 30].includes(dayDelta) ? `net-${dayDelta}` : undefined;
 }
 
-function mapInvoiceToFormValues(entry: Invoice): InvoiceFormInitialValues {
+function mapInvoiceToFormValues(entry: DemoInvoice): InvoiceFormInitialValues {
   return {
     billFromStreetAddress: entry.senderAddress.street,
     billFromCity: entry.senderAddress.city,
@@ -135,7 +113,8 @@ function mapInvoiceToFormValues(entry: Invoice): InvoiceFormInitialValues {
 }
 
 function handleEdit() {
-  openEditInvoiceForm(invoice.id, mapInvoiceToFormValues(invoice));
+  if (!invoice.value) return;
+  openEditInvoiceForm(invoice.value.id, mapInvoiceToFormValues(invoice.value));
 }
 
 function openDeleteDialog() {
@@ -147,12 +126,132 @@ function closeDeleteDialog() {
 }
 
 function confirmDelete() {
+  deleteInvoice(invoiceId);
   closeDeleteDialog();
+  router.push("/demo");
 }
 </script>
 
 <template>
-  <div class="mx-auto flex w-full max-w-182.5 flex-col gap-8">
+  <div
+    v-if="!isHydrated"
+    class="mx-auto flex w-full max-w-182.5 flex-col gap-8"
+  >
+    <div class="animate-pulse space-y-8">
+      <!-- Back link skeleton -->
+      <div
+        class="h-4 w-20 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+      />
+      <!-- Status bar skeleton -->
+      <div
+        class="flex h-[88px] items-center justify-between rounded-[8px] bg-white px-8 shadow-md dark:bg-brand-dark"
+      >
+        <div class="flex items-center gap-5">
+          <div
+            class="h-3 w-12 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+          />
+          <div
+            class="h-10 w-26 rounded-md bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          <div
+            class="h-12 w-18 rounded-full bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+          />
+          <div
+            class="h-12 w-22 rounded-full bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+          />
+          <div
+            class="h-12 w-32 rounded-full bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+          />
+        </div>
+      </div>
+      <!-- Details card skeleton -->
+      <div
+        class="rounded-[8px] bg-white px-[48px] py-[48px] shadow-md dark:bg-brand-dark"
+      >
+        <div class="flex items-start justify-between">
+          <div class="space-y-2">
+            <div
+              class="h-4 w-20 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+            />
+            <div
+              class="h-3 w-32 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+            />
+          </div>
+          <div class="space-y-1.5 text-right">
+            <div
+              class="ml-auto h-3 w-40 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+            />
+            <div
+              class="ml-auto h-3 w-16 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+            />
+            <div
+              class="ml-auto h-3 w-20 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+            />
+            <div
+              class="ml-auto h-3 w-28 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+            />
+          </div>
+        </div>
+        <div class="mt-10 grid grid-cols-3 gap-8">
+          <div class="space-y-8">
+            <div class="space-y-3">
+              <div
+                class="h-3 w-20 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+              />
+              <div
+                class="h-4 w-28 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+              />
+            </div>
+            <div class="space-y-3">
+              <div
+                class="h-3 w-22 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+              />
+              <div
+                class="h-4 w-28 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+              />
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div
+              class="h-3 w-12 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+            />
+            <div
+              class="h-4 w-28 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+            />
+            <div class="mt-2 space-y-1.5">
+              <div
+                class="h-3 w-28 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+              />
+              <div
+                class="h-3 w-16 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+              />
+              <div
+                class="h-3 w-20 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+              />
+              <div
+                class="h-3 w-28 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+              />
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div
+              class="h-3 w-12 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+            />
+            <div
+              class="h-4 w-40 rounded bg-brand-muted-light/50 dark:bg-brand-muted-dark/30"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    v-else-if="invoice"
+    class="mx-auto flex w-full max-w-182.5 flex-col gap-8 pb-24 sm:pb-0"
+  >
     <header>
       <NuxtLink
         to="/demo"

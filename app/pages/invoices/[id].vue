@@ -152,7 +152,7 @@ function confirmDelete() {
 </script>
 
 <template>
-  <div class="mx-auto flex w-full max-w-182.5 flex-col gap-8">
+  <div class="mx-auto flex w-full max-w-182.5 flex-col gap-8 pb-24 sm:pb-0">
     <header>
       <NuxtLink
         to="/dashboard"

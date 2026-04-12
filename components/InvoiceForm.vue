@@ -8,6 +8,23 @@ import Dropdown from "./Dropdown.vue";
 import Input from "./Input.vue";
 import Button from "./Button.vue";
 
+type InvoiceFormPayload = {
+  billFromStreetAddress: string;
+  billFromCity: string;
+  billFromPostCode: string;
+  billFromCountry: string;
+  billToClientName: string;
+  billToClientEmail: string;
+  billToStreetAddress: string;
+  billToCity: string;
+  billToPostCode: string;
+  billToCountry: string;
+  invoiceDate?: string;
+  paymentTerms?: string;
+  projectDescription: string;
+  lineItems: Array<{ name: string; quantity: string; price: string }>;
+};
+
 type LineItem = {
   id: number;
   name: string;
@@ -30,8 +47,8 @@ const props = withDefaults(
 
 const emit = defineEmits<{
   close: [];
-  saveDraft: [];
-  submit: [];
+  saveDraft: [data: InvoiceFormPayload];
+  submit: [data: InvoiceFormPayload];
 }>();
 
 const isEditMode = computed(() => props.mode === "edit");
@@ -150,16 +167,39 @@ function removeLineItem(id: number) {
   lineItems.value = lineItems.value.filter((item) => item.id !== id);
 }
 
+function collectFormData(): InvoiceFormPayload {
+  return {
+    billFromStreetAddress: billFromStreetAddress.value,
+    billFromCity: billFromCity.value,
+    billFromPostCode: billFromPostCode.value,
+    billFromCountry: billFromCountry.value,
+    billToClientName: billToClientName.value,
+    billToClientEmail: billToClientEmail.value,
+    billToStreetAddress: billToStreetAddress.value,
+    billToCity: billToCity.value,
+    billToPostCode: billToPostCode.value,
+    billToCountry: billToCountry.value,
+    invoiceDate: invoiceDate.value,
+    paymentTerms: paymentTerms.value,
+    projectDescription: projectDescription.value,
+    lineItems: lineItems.value.map((item) => ({
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+    })),
+  };
+}
+
 function handleClose() {
   emit("close");
 }
 
 function handleSaveDraft() {
-  emit("saveDraft");
+  emit("saveDraft", collectFormData());
 }
 
 function handleSubmit() {
-  emit("submit");
+  emit("submit", collectFormData());
 }
 </script>
 

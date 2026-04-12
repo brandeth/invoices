@@ -1,21 +1,20 @@
 <script setup lang="ts">
+import { useDemoInvoices } from "~/composables/useDemoInvoices";
 import EmptyState from "../../../components/EmptyState.vue";
 import InvoiceItem from "../../../components/InvoiceItem.vue";
 import InvoicesHeader from "../../../components/InvoicesHeader.vue";
+import Skeleton from "../../../components/Skeleton.vue";
 
-type Invoice = {
-  id: string;
-  dueDate: string;
-  clientName: string;
-  amount: string;
-  status: "paid" | "pending" | "draft";
-  to: string;
-};
+definePageMeta({ layout: "demo" });
 
-const { data: invoices } = await useFetch<Invoice[]>("/api/invoices", {
-  default: () => [],
+const { invoices } = useDemoInvoices();
+
+const isHydrated = ref(false);
+onMounted(() => {
+  isHydrated.value = true;
 });
 
+const isLoading = computed(() => !isHydrated.value);
 const selectedStatuses = ref<string[]>([]);
 const totalInvoices = computed(() => invoices.value.length);
 const filteredInvoices = computed(() => {
@@ -41,7 +40,9 @@ const hasInvoicesToDisplay = computed(() => filteredInvoices.value.length > 0);
     />
 
     <section class="space-y-4" aria-label="Invoices list">
-      <template v-if="hasInvoicesToDisplay">
+      <Skeleton v-if="isLoading" variant="invoice-item" :count="5" />
+
+      <template v-else-if="hasInvoicesToDisplay">
         <InvoiceItem
           v-for="invoice in filteredInvoices"
           :key="invoice.id"

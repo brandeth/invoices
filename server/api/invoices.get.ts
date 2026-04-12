@@ -1,282 +1,80 @@
-export default defineEventHandler(() => {
-  return [
-    {
-      id: "RT3080",
-      title: "Brand Guidelines",
-      invoiceDate: "18 Aug 2021",
-      paymentDue: "19 Aug 2021",
-      dueDate: "19 Aug 2021",
-      clientName: "Jensen Huang",
-      clientEmail: "jensenh@example.com",
-      amount: "$1,800.90",
-      status: "paid",
+import { serverSupabaseClient } from "#supabase/server";
+
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr + "T00:00:00");
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = date.toLocaleString("en-US", {
+    month: "short",
+    timeZone: "UTC",
+  });
+  const year = date.getUTCFullYear();
+  return `${day} ${month} ${year}`;
+}
+
+function formatCurrency(value: number): string {
+  return `$${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+export default defineEventHandler(async (event) => {
+  const client = await serverSupabaseClient(event);
+
+  const { data, error } = await client
+    .from("invoices")
+    .select("*, invoice_items(*)");
+
+  if (error) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: error.message,
+    });
+  }
+
+  return (data ?? []).map((invoice) => {
+    const items = (invoice.invoice_items ?? []).map(
+      (item: {
+        name: string;
+        quantity: number;
+        price: number;
+        total: number;
+      }) => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: formatCurrency(Number(item.price)),
+        total: formatCurrency(Number(item.total)),
+      }),
+    );
+
+    const totalAmount = (invoice.invoice_items ?? []).reduce(
+      (sum: number, item: { total: number }) => sum + Number(item.total),
+      0,
+    );
+
+    const paymentDue = formatDate(invoice.payment_due);
+
+    return {
+      id: invoice.id,
+      title: invoice.title,
+      invoiceDate: formatDate(invoice.invoice_date),
+      paymentDue,
+      dueDate: paymentDue,
+      clientName: invoice.client_name,
+      clientEmail: invoice.client_email,
+      amount: formatCurrency(totalAmount),
+      status: invoice.status,
       senderAddress: {
-        street: "71 Tottenham Court Road",
-        city: "London",
-        postCode: "W1T 4QW",
-        country: "United Kingdom",
+        street: invoice.sender_street ?? "",
+        city: invoice.sender_city ?? "",
+        postCode: invoice.sender_post_code ?? "",
+        country: invoice.sender_country ?? "",
       },
       clientAddress: {
-        street: "33 Hartfield Road",
-        city: "London",
-        postCode: "SW19 3RQ",
-        country: "United Kingdom",
+        street: invoice.client_street ?? "",
+        city: invoice.client_city ?? "",
+        postCode: invoice.client_post_code ?? "",
+        country: invoice.client_country ?? "",
       },
-      items: [
-        {
-          name: "Brand Audit",
-          quantity: 1,
-          price: "$900.00",
-          total: "$900.00",
-        },
-        {
-          name: "Guideline Document",
-          quantity: 1,
-          price: "$900.90",
-          total: "$900.90",
-        },
-      ],
-      to: "/invoices/RT3080",
-    },
-    {
-      id: "XM9141",
-      title: "Graphic Design",
-      invoiceDate: "21 Aug 2021",
-      paymentDue: "20 Sep 2021",
-      dueDate: "20 Aug 2021",
-      clientName: "Alex Grim",
-      clientEmail: "alexgrim@mail.com",
-      amount: "$556.00",
-      status: "pending",
-      senderAddress: {
-        street: "19 Union Terrace",
-        city: "London",
-        postCode: "E1 3EZ",
-        country: "United Kingdom",
-      },
-      clientAddress: {
-        street: "84 Church Way",
-        city: "Bradford",
-        postCode: "BD1 9PB",
-        country: "United Kingdom",
-      },
-      items: [
-        {
-          name: "Banner Design",
-          quantity: 1,
-          price: "$156.00",
-          total: "$156.00",
-        },
-        {
-          name: "Email Design",
-          quantity: 2,
-          price: "$200.00",
-          total: "$400.00",
-        },
-      ],
-      to: "/invoices/XM9141",
-    },
-    {
-      id: "RG0314",
-      title: "Website Redesign",
-      invoiceDate: "28 Aug 2021",
-      paymentDue: "01 Sep 2021",
-      dueDate: "01 Sep 2021",
-      clientName: "John Morrison",
-      clientEmail: "john.morrison@example.com",
-      amount: "$14,002.33",
-      status: "draft",
-      senderAddress: {
-        street: "10 Broad Street",
-        city: "Birmingham",
-        postCode: "B1 2HF",
-        country: "United Kingdom",
-      },
-      clientAddress: {
-        street: "28 Canal Street",
-        city: "Leeds",
-        postCode: "LS1 5PS",
-        country: "United Kingdom",
-      },
-      items: [
-        {
-          name: "Discovery Workshop",
-          quantity: 2,
-          price: "$1,250.00",
-          total: "$2,500.00",
-        },
-        {
-          name: "UI Design",
-          quantity: 3,
-          price: "$2,500.00",
-          total: "$7,500.00",
-        },
-        {
-          name: "Frontend Build",
-          quantity: 1,
-          price: "$4,002.33",
-          total: "$4,002.33",
-        },
-      ],
-      to: "/invoices/RG0314",
-    },
-    {
-      id: "RT2080",
-      title: "Landing Page Copy",
-      invoiceDate: "08 Sep 2021",
-      paymentDue: "12 Sep 2021",
-      dueDate: "12 Sep 2021",
-      clientName: "Samantha Lee",
-      clientEmail: "samantha.lee@example.com",
-      amount: "$1,024.00",
-      status: "paid",
-      senderAddress: {
-        street: "84 King Street",
-        city: "Manchester",
-        postCode: "M2 4WQ",
-        country: "United Kingdom",
-      },
-      clientAddress: {
-        street: "9 Park Lane",
-        city: "Manchester",
-        postCode: "M3 1HZ",
-        country: "United Kingdom",
-      },
-      items: [
-        {
-          name: "Homepage Copy",
-          quantity: 2,
-          price: "$312.00",
-          total: "$624.00",
-        },
-        {
-          name: "CTA Variants",
-          quantity: 5,
-          price: "$80.00",
-          total: "$400.00",
-        },
-      ],
-      to: "/invoices/RT2080",
-    },
-    {
-      id: "AA1449",
-      title: "Mobile App Screens",
-      invoiceDate: "10 Sep 2021",
-      paymentDue: "14 Sep 2021",
-      dueDate: "14 Sep 2021",
-      clientName: "Oliver Grant",
-      clientEmail: "oliver.grant@example.com",
-      amount: "$3,110.44",
-      status: "pending",
-      senderAddress: {
-        street: "5 Queen Square",
-        city: "Bristol",
-        postCode: "BS1 4NT",
-        country: "United Kingdom",
-      },
-      clientAddress: {
-        street: "42 Victoria Street",
-        city: "Bath",
-        postCode: "BA1 1BP",
-        country: "United Kingdom",
-      },
-      items: [
-        {
-          name: "Wireframes",
-          quantity: 4,
-          price: "$250.00",
-          total: "$1,000.00",
-        },
-        {
-          name: "High-Fidelity Screens",
-          quantity: 7,
-          price: "$300.00",
-          total: "$2,100.00",
-        },
-        {
-          name: "Prototype Review",
-          quantity: 1,
-          price: "$10.44",
-          total: "$10.44",
-        },
-      ],
-      to: "/invoices/AA1449",
-    },
-    {
-      id: "TY9141",
-      title: "Illustration Set",
-      invoiceDate: "15 Sep 2021",
-      paymentDue: "18 Sep 2021",
-      dueDate: "18 Sep 2021",
-      clientName: "Emily Carter",
-      clientEmail: "emily.carter@example.com",
-      amount: "$670.12",
-      status: "draft",
-      senderAddress: {
-        street: "22 Rose Lane",
-        city: "Liverpool",
-        postCode: "L1 9BX",
-        country: "United Kingdom",
-      },
-      clientAddress: {
-        street: "14 Bold Street",
-        city: "Liverpool",
-        postCode: "L2 1DS",
-        country: "United Kingdom",
-      },
-      items: [
-        {
-          name: "Character Sketches",
-          quantity: 2,
-          price: "$150.00",
-          total: "$300.00",
-        },
-        {
-          name: "Scene Illustration",
-          quantity: 1,
-          price: "$370.12",
-          total: "$370.12",
-        },
-      ],
-      to: "/invoices/TY9141",
-    },
-    {
-      id: "FV2353",
-      title: "Marketing Assets",
-      invoiceDate: "20 Sep 2021",
-      paymentDue: "24 Sep 2021",
-      dueDate: "24 Sep 2021",
-      clientName: "Janet Weiss",
-      clientEmail: "janet.weiss@example.com",
-      amount: "$2,350.00",
-      status: "paid",
-      senderAddress: {
-        street: "43 George Street",
-        city: "Edinburgh",
-        postCode: "EH2 2HT",
-        country: "United Kingdom",
-      },
-      clientAddress: {
-        street: "58 Princes Street",
-        city: "Edinburgh",
-        postCode: "EH2 2DG",
-        country: "United Kingdom",
-      },
-      items: [
-        {
-          name: "Social Templates",
-          quantity: 5,
-          price: "$250.00",
-          total: "$1,250.00",
-        },
-        {
-          name: "Print Assets",
-          quantity: 2,
-          price: "$550.00",
-          total: "$1,100.00",
-        },
-      ],
-      to: "/invoices/FV2353",
-    },
-  ];
+      items,
+      to: `/invoices/${invoice.id}`,
+    };
+  });
 });

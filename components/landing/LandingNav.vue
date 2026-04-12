@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Menu, X } from "@lucide/vue";
+import { Menu, X, Sun, Moon } from "@lucide/vue";
 
+const isDark = useState<boolean>("color-theme");
 const isMobileMenuOpen = ref(false);
 
 function toggleMobileMenu() {
@@ -60,9 +61,18 @@ function closeMobileMenu() {
 
       <!-- Right: Auth buttons (desktop) -->
       <div class="hidden md:flex items-center gap-4">
+        <button
+          type="button"
+          class="flex items-center justify-center h-10 w-10 rounded-full text-brand-muted hover:text-brand-primary transition-colors"
+          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+          @click="isDark = !isDark"
+        >
+          <Sun v-if="isDark" :size="20" />
+          <Moon v-else :size="20" />
+        </button>
         <NuxtLink
           to="/login"
-          class="preset-heading-s-variant text-brand-muted-dark hover:text-brand-primary transition-colors"
+          class="preset-heading-s-variant text-brand-muted-dark dark:text-brand-muted-light hover:text-brand-primary transition-colors"
         >
           Log In
         </NuxtLink>
@@ -104,10 +114,22 @@ function closeMobileMenu() {
       >
         FAQ
       </a>
+      <button
+        type="button"
+        class="flex items-center gap-3 py-2 text-brand-muted hover:text-brand-primary transition-colors"
+        :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+        @click="isDark = !isDark"
+      >
+        <Sun v-if="isDark" :size="20" />
+        <Moon v-else :size="20" />
+        <span class="preset-body">{{
+          isDark ? "Light Mode" : "Dark Mode"
+        }}</span>
+      </button>
       <div class="flex flex-col gap-3 pt-2">
         <NuxtLink
           to="/login"
-          class="preset-heading-s-variant text-brand-muted-dark hover:text-brand-primary transition-colors py-2"
+          class="preset-heading-s-variant text-brand-muted-dark dark:text-brand-muted-light hover:text-brand-primary transition-colors py-2"
           @click="closeMobileMenu"
         >
           Log In
