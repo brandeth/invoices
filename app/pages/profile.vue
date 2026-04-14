@@ -1,9 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "default",
-});
-
-useSeoMeta({
   title: "Profile",
 });
 

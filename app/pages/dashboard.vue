@@ -4,6 +4,10 @@ import InvoiceItem from "../../components/InvoiceItem.vue";
 import InvoicesHeader from "../../components/InvoicesHeader.vue";
 import Skeleton from "../../components/Skeleton.vue";
 
+definePageMeta({
+  title: "Dashboard",
+});
+
 type Invoice = {
   id: string;
   dueDate: string;

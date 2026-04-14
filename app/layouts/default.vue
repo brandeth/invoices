@@ -77,6 +77,7 @@ onBeforeUnmount(() => {
     <div ref="sidebarRef" class="relative z-30 max-xl:w-full max-xl:shadow-md">
       <Sidebar
         :is-dark="isDark"
+        logo-to="/dashboard"
         @toggle-theme="toggleTheme"
         @logout="handleLogout"
       />

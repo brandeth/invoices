@@ -1,9 +1,22 @@
 <script setup lang="ts">
 import { Sun, LogOut, User } from "@lucide/vue";
 
-defineProps<{
-  isDark: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    isDark: boolean;
+    logoTo?: string;
+  }>(),
+  {
+    logoTo: "/",
+  },
+);
+
+const logoAriaLabel = computed(() => {
+  if (props.logoTo === "/dashboard") return "Go to the dashboard";
+  if (props.logoTo === "/demo") return "Go to the demo invoices";
+
+  return "Go to the landing page";
+});
 
 const emit = defineEmits<{
   toggleTheme: [];
@@ -52,7 +65,7 @@ onBeforeUnmount(() => {
 <template>
   <aside
     class="sticky top-0 flex h-screen w-25.75 shrink-0 flex-col overflow-visible rounded-r-[20px] max-xl:h-20 max-xl:w-full max-xl:flex-row max-xl:items-stretch max-xl:justify-between max-xl:rounded-none"
-    :class="isDark ? 'bg-brand-dark' : 'bg-[#373b53]'"
+    :class="props.isDark ? 'bg-brand-dark' : 'bg-[#373b53]'"
     aria-label="Sidebar"
   >
     <div
@@ -63,13 +76,17 @@ onBeforeUnmount(() => {
         class="absolute inset-x-0 bottom-0 h-1/2 rounded-tl-[20px] bg-brand-primary-light"
       />
 
-      <div class="relative flex h-full w-full items-center justify-center">
+      <NuxtLink
+        :to="props.logoTo"
+        :aria-label="logoAriaLabel"
+        class="relative flex h-full w-full items-center justify-center"
+      >
         <img
           src="/icons/logo-light.svg"
           alt="Invoices logo"
           class="h-10 w-10 max-xl:h-8 max-xl:w-8"
         />
-      </div>
+      </NuxtLink>
     </div>
 
     <div
@@ -81,12 +98,14 @@ onBeforeUnmount(() => {
         <button
           type="button"
           class="cursor-pointer flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-          :aria-pressed="isDark"
+          :aria-label="
+            props.isDark ? 'Switch to light mode' : 'Switch to dark mode'
+          "
+          :aria-pressed="props.isDark"
           @click="emit('toggleTheme')"
         >
           <Sun
-            v-if="isDark"
+            v-if="props.isDark"
             :size="20"
             color="var(--color-brand-muted-dark)"
             aria-hidden="true"
@@ -131,7 +150,7 @@ onBeforeUnmount(() => {
           <div
             v-if="isProfileMenuOpen"
             role="menu"
-            class="absolute bottom-6 left-full z-50 ml-3 w-44 overflow-hidden rounded-lg bg-white shadow-[0_10px_20px_0_rgba(72,84,159,0.25)] max-xl:left-auto max-xl:right-0 max-xl:top-full max-xl:mt-3 max-xl:ml-0 max-xl:translate-y-0 dark:bg-brand-dark-light"
+            class="absolute bottom-6 left-full z-60 ml-3 w-44 overflow-hidden rounded-lg bg-white shadow-[0_10px_20px_0_rgba(72,84,159,0.25)] max-xl:bottom-auto max-xl:left-auto max-xl:right-4 sm:max-xl:right-6 max-xl:top-full max-xl:mt-4 max-xl:ml-0 max-xl:origin-top-right dark:bg-brand-dark-light"
           >
             <NuxtLink
               to="/profile"

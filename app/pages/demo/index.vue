@@ -5,7 +5,10 @@ import InvoiceItem from "../../../components/InvoiceItem.vue";
 import InvoicesHeader from "../../../components/InvoicesHeader.vue";
 import Skeleton from "../../../components/Skeleton.vue";
 
-definePageMeta({ layout: "demo" });
+definePageMeta({
+  layout: "demo",
+  title: "Demo",
+});
 
 const { invoices, isStorageHydrated } = useDemoInvoices();
 

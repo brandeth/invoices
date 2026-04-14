@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "auth",
+  title: "Create Account",
 });
 
 const client = useSupabaseClient();
@@ -59,7 +60,9 @@ async function handleRegister() {
     class="w-full max-w-120 rounded-lg bg-white px-8 py-10 shadow-md sm:px-12 dark:bg-brand-dark"
   >
     <div class="mb-10 flex flex-col items-center gap-3">
-      <div
+      <NuxtLink
+        to="/"
+        aria-label="Go to the landing page"
         class="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl"
       >
         <div class="absolute inset-x-0 top-0 h-full bg-brand-primary" />
@@ -71,7 +74,7 @@ async function handleRegister() {
           alt="Invoices logo"
           class="relative h-8 w-8"
         />
-      </div>
+      </NuxtLink>
     </div>
 
     <h1

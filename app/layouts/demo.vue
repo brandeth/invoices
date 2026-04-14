@@ -84,7 +84,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="flex h-full gap-0 max-xl:flex-col xl:flex-row">
     <div ref="sidebarRef" class="relative z-30 max-xl:w-full max-xl:shadow-md">
-      <Sidebar :is-dark="isDark" @toggle-theme="toggleTheme" />
+      <Sidebar :is-dark="isDark" logo-to="/demo" @toggle-theme="toggleTheme" />
     </div>
 
     <div class="relative flex min-h-0 min-w-0 flex-1">

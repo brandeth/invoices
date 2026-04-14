@@ -4,6 +4,7 @@ import { Menu, X, Sun, Moon } from "@lucide/vue";
 const isDark = useState<boolean>("color-theme");
 const user = useSupabaseUser();
 const isMobileMenuOpen = ref(false);
+const logoLinkTo = computed(() => (user.value ? "/dashboard" : "/"));
 const authLinkTo = computed(() => (user.value ? "/dashboard" : "/login"));
 const authLinkLabel = computed(() => (user.value ? "Dashboard" : "Log In"));
 const ctaLinkTo = computed(() => (user.value ? "/dashboard" : "/register"));
@@ -28,7 +29,7 @@ function closeMobileMenu() {
       <!-- Left: Logo + Nav links -->
       <div class="flex items-center gap-8">
         <NuxtLink
-          to="/"
+          :to="logoLinkTo"
           class="flex items-center gap-3"
           @click="closeMobileMenu"
         >

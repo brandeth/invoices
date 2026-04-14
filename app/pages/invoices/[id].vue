@@ -40,6 +40,11 @@ type Invoice = {
 
 const route = useRoute();
 const invoiceId = String(route.params.id);
+
+useSeoMeta({
+  title: () => `Invoice #${String(route.params.id)}`,
+});
+
 const { openEdit: openEditInvoiceForm } = useInvoiceFormState();
 const isDeleteDialogOpen = ref(false);
 const isPaymentStatusDialogOpen = ref(false);

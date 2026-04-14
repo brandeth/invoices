@@ -16,6 +16,11 @@ definePageMeta({ layout: "demo" });
 const route = useRoute();
 const router = useRouter();
 const invoiceId = String(route.params.id);
+
+useSeoMeta({
+  title: () => `Invoice #${String(route.params.id)}`,
+});
+
 const { openEdit: openEditInvoiceForm } = useInvoiceFormState();
 const { getById, deleteInvoice, updateStatus, isStorageHydrated } =
   useDemoInvoices();
