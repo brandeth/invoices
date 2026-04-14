@@ -3,6 +3,14 @@ import { useId } from "vue";
 
 import Button from "./Button.vue";
 
+type ButtonVariant =
+  | "default"
+  | "secondary"
+  | "neutral"
+  | "danger"
+  | "tertiary"
+  | "outline";
+
 const props = withDefaults(
   defineProps<{
     open: boolean;
@@ -10,10 +18,12 @@ const props = withDefaults(
     description: string;
     confirmLabel?: string;
     cancelLabel?: string;
+    confirmButtonVariant?: ButtonVariant;
   }>(),
   {
     confirmLabel: "Delete",
     cancelLabel: "Cancel",
+    confirmButtonVariant: "danger",
   },
 );
 
@@ -91,7 +101,7 @@ onBeforeUnmount(() => {
           <Button variant="secondary" @click="cancelDialog">
             {{ cancelLabel }}
           </Button>
-          <Button variant="danger" @click="confirmDialog">
+          <Button :variant="confirmButtonVariant" @click="confirmDialog">
             {{ confirmLabel }}
           </Button>
         </div>

@@ -20,7 +20,8 @@ export default defineEventHandler(async (event) => {
 
   const { data, error } = await client
     .from("invoices")
-    .select("*, invoice_items(*)");
+    .select("*, invoice_items(*)")
+    .order("invoice_date", { ascending: false });
 
   if (error) {
     throw createError({

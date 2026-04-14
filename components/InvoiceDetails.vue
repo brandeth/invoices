@@ -105,14 +105,14 @@ defineProps<{
         </div>
       </div>
 
-      <div class="space-y-3">
+      <div class="col-span-2 space-y-3 sm:col-span-1">
         <p
           class="preset-body-variant text-brand-muted-dark dark:text-brand-muted-light"
         >
           Sent to
         </p>
         <p
-          class="preset-heading-s break-words text-brand-black dark:text-white"
+          class="preset-heading-s wrap-break-word text-brand-black dark:text-white"
         >
           {{ clientEmail }}
         </p>

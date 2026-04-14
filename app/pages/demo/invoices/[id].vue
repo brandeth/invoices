@@ -17,22 +17,58 @@ const route = useRoute();
 const router = useRouter();
 const invoiceId = String(route.params.id);
 const { openEdit: openEditInvoiceForm } = useInvoiceFormState();
-const { getById, deleteInvoice } = useDemoInvoices();
+const { getById, deleteInvoice, updateStatus, isStorageHydrated } =
+  useDemoInvoices();
 const isDeleteDialogOpen = ref(false);
+const isPaymentStatusDialogOpen = ref(false);
 
 const invoice = computed(() => getById(invoiceId));
 
+function getNextPaymentStatus(status: DemoInvoice["status"]) {
+  if (status === "pending") {
+    return "paid";
+  }
+
+  if (status === "paid") {
+    return "pending";
+  }
+
+  return undefined;
+}
+
+const paymentStatusActionTarget = computed(() =>
+  invoice.value ? getNextPaymentStatus(invoice.value.status) : undefined,
+);
+
+const markPendingDescription = computed(() =>
+  invoice.value
+    ? `Are you sure you want to mark invoice #${invoice.value.id} as pending? This changes the payment status back from paid.`
+    : "",
+);
+
 const isHydrated = ref(false);
+const isPageReady = computed(() => isHydrated.value && isStorageHydrated.value);
+
+function throwInvoiceNotFoundError() {
+  throw createError({
+    statusCode: 404,
+    statusMessage: "Invoice not found",
+  });
+}
 
 onMounted(() => {
   isHydrated.value = true;
-  if (!invoice.value) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "Invoice not found",
-    });
-  }
 });
+
+watch(
+  isPageReady,
+  (ready) => {
+    if (ready && !invoice.value) {
+      throwInvoiceNotFoundError();
+    }
+  },
+  { immediate: true },
+);
 
 const displayMonthMap: Record<string, number> = {
   Jan: 1,
@@ -117,6 +153,38 @@ function handleEdit() {
   openEditInvoiceForm(invoice.value.id, mapInvoiceToFormValues(invoice.value));
 }
 
+function applyPaymentStatusAction() {
+  const nextStatus = paymentStatusActionTarget.value;
+
+  if (!invoice.value || !nextStatus) {
+    return;
+  }
+
+  updateStatus(invoice.value.id, nextStatus);
+}
+
+function handlePaymentStatusAction() {
+  if (!invoice.value || !paymentStatusActionTarget.value) {
+    return;
+  }
+
+  if (invoice.value.status === "paid") {
+    isPaymentStatusDialogOpen.value = true;
+    return;
+  }
+
+  applyPaymentStatusAction();
+}
+
+function closePaymentStatusDialog() {
+  isPaymentStatusDialogOpen.value = false;
+}
+
+function confirmPaymentStatusAction() {
+  applyPaymentStatusAction();
+  closePaymentStatusDialog();
+}
+
 function openDeleteDialog() {
   isDeleteDialogOpen.value = true;
 }
@@ -134,7 +202,7 @@ function confirmDelete() {
 
 <template>
   <div
-    v-if="!isHydrated"
+    v-if="!isPageReady"
     class="mx-auto flex w-full max-w-182.5 flex-col gap-8"
   >
     <div class="animate-pulse space-y-8">
@@ -144,7 +212,7 @@ function confirmDelete() {
       />
       <!-- Status bar skeleton -->
       <div
-        class="flex h-[88px] items-center justify-between rounded-[8px] bg-white px-8 shadow-md dark:bg-brand-dark"
+        class="flex h-22 items-center justify-between rounded-lg bg-white px-8 shadow-md dark:bg-brand-dark"
       >
         <div class="flex items-center gap-5">
           <div
@@ -167,9 +235,7 @@ function confirmDelete() {
         </div>
       </div>
       <!-- Details card skeleton -->
-      <div
-        class="rounded-[8px] bg-white px-[48px] py-[48px] shadow-md dark:bg-brand-dark"
-      >
+      <div class="rounded-lg bg-white px-12 py-12 shadow-md dark:bg-brand-dark">
         <div class="flex items-start justify-between">
           <div class="space-y-2">
             <div
@@ -271,6 +337,7 @@ function confirmDelete() {
       :status="invoice.status"
       @delete="openDeleteDialog"
       @edit="handleEdit"
+      @payment-status-action="handlePaymentStatusAction"
     />
 
     <InvoiceDetails
@@ -284,6 +351,17 @@ function confirmDelete() {
       :sender-address="invoice.senderAddress"
       :client-address="invoice.clientAddress"
       :items="invoice.items"
+    />
+
+    <ConfirmationDialog
+      :open="isPaymentStatusDialogOpen"
+      title="Mark Invoice as Pending?"
+      :description="markPendingDescription"
+      confirm-label="Mark as Pending"
+      confirm-button-variant="default"
+      @cancel="closePaymentStatusDialog"
+      @close="closePaymentStatusDialog"
+      @confirm="confirmPaymentStatusAction"
     />
 
     <ConfirmationDialog

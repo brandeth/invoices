@@ -493,29 +493,49 @@ function handleSubmit() {
     </div>
 
     <footer
-      class="shrink-0 bg-white shadow-[0_-10px_10px_-10px_rgba(72,84,159,0.1)] sm:ml-25.75 md:max-xl:ml-0 dark:bg-brand-dark"
+      class="shrink-0 bg-white shadow-[0_-10px_10px_-10px_rgba(72,84,159,0.1)] sm:ml-25.75 md:max-xl:ml-0 dark:bg-brand-surface-dark"
     >
       <div
         :class="[
-          'flex max-w-154 flex-wrap items-center justify-center gap-2 px-6 py-5 sm:flex-nowrap sm:gap-4 sm:px-14 sm:py-8',
-          isEditMode ? 'sm:justify-end' : 'sm:justify-between',
+          'max-w-154 w-full items-center px-4 py-5 sm:px-14 sm:py-8',
+          isEditMode
+            ? 'flex flex-nowrap justify-center gap-2 sm:justify-end sm:gap-4'
+            : 'grid grid-cols-[auto_minmax(0,1fr)] gap-1 sm:flex sm:flex-nowrap sm:justify-between sm:gap-4',
         ]"
       >
         <template v-if="isEditMode">
-          <div class="flex items-center gap-2">
+          <div class="flex flex-nowrap items-center gap-2">
             <Button variant="secondary" @click="handleClose">Cancel</Button>
             <Button type="submit" form="invoice-form">Save Changes</Button>
           </div>
         </template>
 
         <template v-else>
-          <Button variant="secondary" @click="handleClose">Discard</Button>
+          <Button
+            variant="secondary"
+            class="shrink-0 px-2.5! sm:px-6!"
+            @click="handleClose"
+          >
+            Discard
+          </Button>
 
-          <div class="flex items-center gap-2">
-            <Button variant="neutral" @click="handleSaveDraft">
+          <div
+            class="grid min-w-0 grid-cols-2 gap-1 sm:flex sm:flex-none sm:items-center sm:gap-2"
+          >
+            <Button
+              variant="neutral"
+              class="min-w-0 w-full justify-center px-2! sm:w-auto sm:px-6!"
+              @click="handleSaveDraft"
+            >
               Save as Draft
             </Button>
-            <Button type="submit" form="invoice-form">Save &amp; Send</Button>
+            <Button
+              type="submit"
+              form="invoice-form"
+              class="min-w-0 w-full justify-center px-2! sm:w-auto sm:px-6!"
+            >
+              Save &amp; Send
+            </Button>
           </div>
         </template>
       </div>

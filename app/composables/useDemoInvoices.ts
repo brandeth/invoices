@@ -324,6 +324,31 @@ const MONTHS = [
   "Dec",
 ];
 
+function getDisplayDateTimestamp(value: string): number {
+  const match = /^(\d{1,2})\s([A-Za-z]{3})\s(\d{4})$/.exec(value.trim());
+
+  if (!match) {
+    return 0;
+  }
+
+  const [, day, monthLabel, year] = match;
+  const monthIndex = MONTHS.indexOf(monthLabel);
+
+  if (monthIndex === -1) {
+    return 0;
+  }
+
+  return Date.UTC(Number(year), monthIndex, Number(day));
+}
+
+function sortInvoicesByDateDesc(invoices: DemoInvoice[]): DemoInvoice[] {
+  return [...invoices].sort(
+    (left, right) =>
+      getDisplayDateTimestamp(right.invoiceDate) -
+      getDisplayDateTimestamp(left.invoiceDate),
+  );
+}
+
 function generateId(): string {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const l1 = letters[Math.floor(Math.random() * 26)];
@@ -412,22 +437,63 @@ function buildInvoiceFromForm(
   };
 }
 
+function cloneDemoInvoice(invoice: DemoInvoice): DemoInvoice {
+  return {
+    ...invoice,
+    senderAddress: { ...invoice.senderAddress },
+    clientAddress: { ...invoice.clientAddress },
+    items: invoice.items.map((item) => ({ ...item })),
+  };
+}
+
+function cloneSeedInvoices(): DemoInvoice[] {
+  return sortInvoicesByDateDesc(SEED_INVOICES.map(cloneDemoInvoice));
+}
+
+function readStoredInvoices(): DemoInvoice[] | null {
+  const stored = localStorage.getItem(STORAGE_KEY);
+
+  if (!stored) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(stored) as unknown;
+
+    return Array.isArray(parsed) ? (parsed as DemoInvoice[]) : null;
+  } catch {
+    return null;
+  }
+}
+
 function persist(data: DemoInvoice[]): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
 export function useDemoInvoices() {
-  const invoices = useState<DemoInvoice[]>("demo-invoices", () => []);
+  const invoices = useState<DemoInvoice[]>("demo-invoices", cloneSeedInvoices);
+  const isStorageHydrated = useState<boolean>(
+    "demo-invoices-storage-hydrated",
+    () => false,
+  );
 
-  if (import.meta.client) {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      invoices.value = JSON.parse(stored);
-    } else {
-      invoices.value = SEED_INVOICES;
-      persist(SEED_INVOICES);
+  onMounted(() => {
+    if (isStorageHydrated.value) {
+      return;
     }
-  }
+
+    const storedInvoices = readStoredInvoices();
+
+    if (storedInvoices) {
+      invoices.value = sortInvoicesByDateDesc(storedInvoices);
+      persist(invoices.value);
+    } else {
+      invoices.value = cloneSeedInvoices();
+      persist(invoices.value);
+    }
+
+    isStorageHydrated.value = true;
+  });
 
   function getById(id: string): DemoInvoice | undefined {
     return invoices.value.find((inv) => inv.id === id);
@@ -439,7 +505,7 @@ export function useDemoInvoices() {
   ): void {
     const id = generateId();
     const invoice = buildInvoiceFromForm(form, id, status);
-    invoices.value.push(invoice);
+    invoices.value = sortInvoicesByDateDesc([...invoices.value, invoice]);
     persist(invoices.value);
   }
 
@@ -448,7 +514,9 @@ export function useDemoInvoices() {
     if (index === -1) return;
     const existing = invoices.value[index];
     const updated = buildInvoiceFromForm(form, id, existing.status);
-    invoices.value[index] = updated;
+    const nextInvoices = [...invoices.value];
+    nextInvoices[index] = updated;
+    invoices.value = sortInvoicesByDateDesc(nextInvoices);
     persist(invoices.value);
   }
 
@@ -457,18 +525,22 @@ export function useDemoInvoices() {
     persist(invoices.value);
   }
 
-  function updateStatus(
-    id: string,
-    status: "paid" | "pending" | "draft",
-  ): void {
-    const invoice = invoices.value.find((inv) => inv.id === id);
-    if (!invoice) return;
-    invoice.status = status;
+  function updateStatus(id: string, status: DemoInvoice["status"]): void {
+    const invoiceIndex = invoices.value.findIndex((inv) => inv.id === id);
+
+    if (invoiceIndex === -1) {
+      return;
+    }
+
+    invoices.value = invoices.value.map((invoice) =>
+      invoice.id === id ? { ...invoice, status } : invoice,
+    );
     persist(invoices.value);
   }
 
   return {
     invoices,
+    isStorageHydrated,
     getById,
     addInvoice,
     updateInvoice,

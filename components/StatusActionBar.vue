@@ -4,19 +4,40 @@ import InvoiceStatusBadge from "./InvoiceStatusBadge.vue";
 
 type InvoiceStatus = "paid" | "pending" | "draft";
 
-defineProps<{
-  status: InvoiceStatus;
-}>();
+const props = withDefaults(
+  defineProps<{
+    status: InvoiceStatus;
+    paymentStatusActionLoading?: boolean;
+  }>(),
+  {
+    paymentStatusActionLoading: false,
+  },
+);
+
+const paymentStatusActionLabel = computed(() => {
+  if (props.status === "pending") {
+    return "Mark as Paid";
+  }
+
+  if (props.status === "paid") {
+    return "Mark as Pending";
+  }
+
+  return undefined;
+});
+
+const paymentStatusActionVariant = computed(() => "default");
 
 defineEmits<{
   edit: [];
   delete: [];
+  paymentStatusAction: [];
 }>();
 </script>
 
 <template>
   <section
-    class="flex h-[88px] items-center justify-between rounded-[8px] bg-white px-6 sm:px-8 shadow-md dark:bg-brand-dark"
+    class="flex h-22 items-center justify-between rounded-lg bg-white px-6 sm:px-8 shadow-md dark:bg-brand-dark"
     aria-label="Invoice status and actions"
   >
     <div
@@ -26,13 +47,20 @@ defineEmits<{
         class="preset-body-variant text-[#858bb2] dark:text-brand-muted-light"
         >Status</span
       >
-      <InvoiceStatusBadge :status="status" />
+      <InvoiceStatusBadge :status="props.status" />
     </div>
 
     <div class="hidden sm:flex items-center gap-2">
       <Button variant="secondary" @click="$emit('edit')">Edit</Button>
       <Button variant="danger" @click="$emit('delete')">Delete</Button>
-      <Button>Mark as Paid</Button>
+      <Button
+        v-if="paymentStatusActionLabel"
+        :variant="paymentStatusActionVariant"
+        :disabled="props.paymentStatusActionLoading"
+        @click="$emit('paymentStatusAction')"
+      >
+        {{ paymentStatusActionLabel }}
+      </Button>
     </div>
   </section>
 
@@ -52,6 +80,14 @@ defineEmits<{
       @click="$emit('delete')"
       >Delete</Button
     >
-    <Button class="flex-auto justify-center">Mark as Paid</Button>
+    <Button
+      v-if="paymentStatusActionLabel"
+      class="flex-auto justify-center"
+      :variant="paymentStatusActionVariant"
+      :disabled="props.paymentStatusActionLoading"
+      @click="$emit('paymentStatusAction')"
+    >
+      {{ paymentStatusActionLabel }}
+    </Button>
   </div>
 </template>

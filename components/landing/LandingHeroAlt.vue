@@ -6,6 +6,14 @@ const orbRef = ref<HTMLElement | null>(null);
 let ctx: gsap.Context | undefined;
 let orbFloatTween: gsap.core.Tween | undefined;
 
+async function goToRegister() {
+  await navigateTo("/register");
+}
+
+async function goToDemo() {
+  await navigateTo("/demo");
+}
+
 onMounted(() => {
   if (!heroRef.value || !orbRef.value) {
     return;
@@ -134,7 +142,7 @@ onUnmounted(() => {
           Invoicing made simple.
         </span>
         <span
-          class="hero-line-2 block text-[clamp(32px,6vw,80px)] font-bold leading-[1.1] tracking-tight text-brand-black/60 dark:text-[#ede7d9]/70 mt-2 sm:pl-[5%]"
+          class="hero-line-2 block text-[clamp(32px,6vw,80px)] font-bold leading-[1.1] tracking-tight text-brand-black/60 dark:text-[#ede7d9]/70 mt-2"
           style="
             opacity: 0;
             visibility: hidden;
@@ -158,28 +166,29 @@ onUnmounted(() => {
       </p>
 
       <div class="flex flex-col sm:flex-row justify-center gap-4 mt-10">
-        <NuxtLink
-          to="/register"
-          class="hero-cta-btn inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-brand-primary text-white dark:bg-white dark:text-brand-surface-dark preset-heading-s-variant hover:bg-white/90 transition-colors"
+        <Button
+          class="hero-cta-btn justify-center px-8 sm:px-8 dark:bg-white dark:text-brand-surface-dark dark:enabled:hover:bg-white/90"
           style="
             opacity: 0;
             visibility: hidden;
             transform: translate3d(0, 30px, 0);
           "
+          @click="goToRegister"
         >
           Get Started Free
-        </NuxtLink>
-        <NuxtLink
-          to="/demo"
-          class="hero-cta-btn inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full border-2 border-brand-muted-light text-brand-muted-dark dark:border-white/30 dark:text-white preset-heading-s-variant hover:border-white transition-colors"
+        </Button>
+        <Button
+          variant="outline"
+          class="hero-cta-btn"
           style="
             opacity: 0;
             visibility: hidden;
             transform: translate3d(0, 30px, 0);
           "
+          @click="goToDemo"
         >
           View Live Demo
-        </NuxtLink>
+        </Button>
       </div>
 
       <p

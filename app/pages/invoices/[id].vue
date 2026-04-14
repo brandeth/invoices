@@ -42,14 +42,41 @@ const route = useRoute();
 const invoiceId = String(route.params.id);
 const { openEdit: openEditInvoiceForm } = useInvoiceFormState();
 const isDeleteDialogOpen = ref(false);
+const isPaymentStatusDialogOpen = ref(false);
+const isPaymentStatusActionPending = ref(false);
+const paymentStatusActionError = ref("");
 
 const { data: invoices } = await useFetch<Invoice[]>("/api/invoices", {
   default: () => [],
 });
 
-const invoice = invoices.value.find((entry) => entry.id === invoiceId);
+const invoice = computed(() =>
+  invoices.value.find((entry) => entry.id === invoiceId),
+);
 
-if (!invoice) {
+function getNextPaymentStatus(status: Invoice["status"]) {
+  if (status === "pending") {
+    return "paid";
+  }
+
+  if (status === "paid") {
+    return "pending";
+  }
+
+  return undefined;
+}
+
+const paymentStatusActionTarget = computed(() =>
+  invoice.value ? getNextPaymentStatus(invoice.value.status) : undefined,
+);
+
+const markPendingDescription = computed(() =>
+  invoice.value
+    ? `Are you sure you want to mark invoice #${invoice.value.id} as pending? This changes the payment status back from paid.`
+    : "",
+);
+
+if (!invoice.value) {
   throw createError({
     statusCode: 404,
     statusMessage: "Invoice not found",
@@ -135,7 +162,91 @@ function mapInvoiceToFormValues(entry: Invoice): InvoiceFormInitialValues {
 }
 
 function handleEdit() {
-  openEditInvoiceForm(invoice.id, mapInvoiceToFormValues(invoice));
+  if (!invoice.value) {
+    return;
+  }
+
+  openEditInvoiceForm(invoice.value.id, mapInvoiceToFormValues(invoice.value));
+}
+
+function getPaymentStatusActionErrorMessage(error: unknown) {
+  if (error && typeof error === "object" && "data" in error) {
+    const data = error.data as
+      | { statusMessage?: string; message?: string }
+      | undefined;
+
+    if (data?.statusMessage) {
+      return data.statusMessage;
+    }
+
+    if (data?.message) {
+      return data.message;
+    }
+  }
+
+  if (error instanceof Error && error.message) {
+    return error.message;
+  }
+
+  return "Unable to update invoice status. Please try again.";
+}
+
+async function applyPaymentStatusAction() {
+  const nextStatus = paymentStatusActionTarget.value;
+
+  if (!invoice.value || !nextStatus || isPaymentStatusActionPending.value) {
+    return;
+  }
+
+  isPaymentStatusActionPending.value = true;
+  paymentStatusActionError.value = "";
+
+  try {
+    const updatedInvoice = await $fetch<Pick<Invoice, "id" | "status">>(
+      `/api/invoices/${invoice.value.id}/status`,
+      {
+        method: "PATCH",
+        body: { status: nextStatus },
+      },
+    );
+
+    invoices.value = invoices.value.map((entry) =>
+      entry.id === updatedInvoice.id
+        ? { ...entry, status: updatedInvoice.status }
+        : entry,
+    );
+  } catch (error) {
+    paymentStatusActionError.value = getPaymentStatusActionErrorMessage(error);
+  } finally {
+    isPaymentStatusActionPending.value = false;
+  }
+}
+
+function handlePaymentStatusAction() {
+  if (
+    !invoice.value ||
+    !paymentStatusActionTarget.value ||
+    isPaymentStatusActionPending.value
+  ) {
+    return;
+  }
+
+  if (invoice.value.status === "paid") {
+    paymentStatusActionError.value = "";
+    isPaymentStatusDialogOpen.value = true;
+    return;
+  }
+
+  void applyPaymentStatusAction();
+}
+
+function closePaymentStatusDialog() {
+  isPaymentStatusDialogOpen.value = false;
+}
+
+function confirmPaymentStatusAction() {
+  closePaymentStatusDialog();
+  void applyPaymentStatusAction();
 }
 
 function openDeleteDialog() {
@@ -170,9 +281,19 @@ function confirmDelete() {
 
     <StatusActionBar
       :status="invoice.status"
+      :payment-status-action-loading="isPaymentStatusActionPending"
       @delete="openDeleteDialog"
       @edit="handleEdit"
+      @payment-status-action="handlePaymentStatusAction"
     />
+
+    <p
+      v-if="paymentStatusActionError"
+      class="preset-body rounded-sm bg-brand-danger/10 px-5 py-3 text-brand-danger"
+      role="alert"
+    >
+      {{ paymentStatusActionError }}
+    </p>
 
     <InvoiceDetails
       :id="invoice.id"
@@ -185,6 +306,17 @@ function confirmDelete() {
       :sender-address="invoice.senderAddress"
       :client-address="invoice.clientAddress"
       :items="invoice.items"
+    />
+
+    <ConfirmationDialog
+      :open="isPaymentStatusDialogOpen"
+      title="Mark Invoice as Pending?"
+      :description="markPendingDescription"
+      confirm-label="Mark as Pending"
+      confirm-button-variant="default"
+      @cancel="closePaymentStatusDialog"
+      @close="closePaymentStatusDialog"
+      @confirm="confirmPaymentStatusAction"
     />
 
     <ConfirmationDialog

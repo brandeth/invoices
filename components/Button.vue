@@ -5,7 +5,8 @@ type ButtonVariant =
   | "secondary"
   | "neutral"
   | "danger"
-  | "tertiary";
+  | "tertiary"
+  | "outline";
 
 const props = withDefaults(
   defineProps<{
@@ -36,6 +37,8 @@ const rootVariantClassMap: Record<ButtonVariant, string> = {
     "bg-brand-danger text-white enabled:hover:bg-brand-danger-light enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-brand-danger-light",
   tertiary:
     "min-w-[350px] justify-center bg-[#f9fafe] enabled:hover:text-brand-muted-dark text-brand-muted-dark enabled:hover:bg-brand-muted-light dark:bg-brand-dark-light dark:text-brand-muted-light dark:enabled:hover:bg-brand-muted-light enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-brand-muted-dark dark:enabled:focus-visible:outline-brand-muted-light",
+  outline:
+    "border-2 border-brand-muted-light bg-transparent text-brand-muted-dark enabled:hover:border-brand-primary enabled:hover:bg-brand-primary/5 enabled:hover:text-brand-primary dark:border-white/30 dark:text-white dark:enabled:hover:border-brand-primary-light dark:enabled:hover:bg-brand-primary/10 dark:enabled:hover:text-brand-primary-light enabled:focus-visible:outline-2 enabled:focus-visible:outline-offset-2 enabled:focus-visible:outline-brand-primary-light dark:enabled:focus-visible:outline-brand-primary-light",
 };
 
 const contentVariantClassMap: Record<ButtonVariant, string> = {
@@ -44,6 +47,7 @@ const contentVariantClassMap: Record<ButtonVariant, string> = {
   neutral: "gap-[16px]",
   danger: "gap-[16px]",
   tertiary: "gap-2 enabled:group-hover:gap-2",
+  outline: "gap-2 sm:gap-[16px]",
 };
 
 const iconWrapperVariantClassMap: Record<ButtonVariant, string> = {
@@ -52,10 +56,11 @@ const iconWrapperVariantClassMap: Record<ButtonVariant, string> = {
   neutral: "h-8 w-8 rounded-full bg-white text-brand-primary",
   danger: "h-8 w-8 rounded-full bg-white text-brand-primary",
   tertiary: "h-auto w-auto p-0 text-current",
+  outline: "h-auto w-auto p-0 text-current",
 };
 
 const buttonPaddingClass = computed(() => {
-  if (props.variant === "tertiary") {
+  if (props.variant === "tertiary" || props.variant === "outline") {
     return hasIcon.value ? "px-6" : "px-8";
   }
 

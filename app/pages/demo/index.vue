@@ -7,14 +7,14 @@ import Skeleton from "../../../components/Skeleton.vue";
 
 definePageMeta({ layout: "demo" });
 
-const { invoices } = useDemoInvoices();
+const { invoices, isStorageHydrated } = useDemoInvoices();
 
 const isHydrated = ref(false);
 onMounted(() => {
   isHydrated.value = true;
 });
 
-const isLoading = computed(() => !isHydrated.value);
+const isLoading = computed(() => !isHydrated.value || !isStorageHydrated.value);
 const selectedStatuses = ref<string[]>([]);
 const totalInvoices = computed(() => invoices.value.length);
 const filteredInvoices = computed(() => {
