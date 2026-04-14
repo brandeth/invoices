@@ -48,7 +48,7 @@ onMounted(() => {
           duration: 1.2,
           clearProps: "transform,opacity,visibility",
         },
-        "-=0.8"
+        "-=0.8",
       )
       .to(
         orbElement,
@@ -60,7 +60,7 @@ onMounted(() => {
           ease: "back.out(1.7)",
           clearProps: "transform,opacity,visibility",
         },
-        "-=0.6"
+        "-=0.6",
       )
       .to(
         ".hero-subtitle",
@@ -70,7 +70,7 @@ onMounted(() => {
           duration: 0.8,
           clearProps: "transform,opacity,visibility",
         },
-        "-=0.4"
+        "-=0.4",
       )
       .to(
         ".hero-cta-btn",
@@ -81,7 +81,7 @@ onMounted(() => {
           stagger: 0.12,
           clearProps: "transform,opacity,visibility",
         },
-        "-=0.3"
+        "-=0.3",
       )
       .to(
         ".hero-trust",
@@ -90,7 +90,7 @@ onMounted(() => {
           duration: 0.6,
           clearProps: "transform,opacity,visibility",
         },
-        "-=0.2"
+        "-=0.2",
       );
   }, heroRef.value);
 });
@@ -116,7 +116,7 @@ onUnmounted(() => {
       ref="orbRef"
       data-hero-orb
       class="absolute top-1/4 right-[10%] w-75 h-75 sm:w-100 sm:h-100 rounded-full bg-linear-to-br from-brand-primary to-brand-primary-light opacity-10 dark:opacity-20 blur-[80px] pointer-events-none"
-      style="visibility: hidden; transform: scale(0); transform-origin: center;"
+      style="visibility: hidden; transform: scale(0); transform-origin: center"
     />
 
     <div
@@ -125,13 +125,21 @@ onUnmounted(() => {
       <h1>
         <span
           class="hero-line-1 block text-[clamp(40px,8vw,96px)] font-bold leading-[1.05] tracking-tight text-brand-black dark:text-[#ede7d9]"
-          style="opacity: 0; visibility: hidden; transform: translate3d(0, 120px, 0);"
+          style="
+            opacity: 0;
+            visibility: hidden;
+            transform: translate3d(0, 120px, 0);
+          "
         >
           Invoicing made simple.
         </span>
         <span
           class="hero-line-2 block text-[clamp(32px,6vw,80px)] font-bold leading-[1.1] tracking-tight text-brand-black/60 dark:text-[#ede7d9]/70 mt-2 sm:pl-[5%]"
-          style="opacity: 0; visibility: hidden; transform: translate3d(0, 80px, 0);"
+          style="
+            opacity: 0;
+            visibility: hidden;
+            transform: translate3d(0, 80px, 0);
+          "
         >
           so you can focus on your&nbsp;work.
         </span>
@@ -139,7 +147,11 @@ onUnmounted(() => {
 
       <p
         class="hero-subtitle text-lg sm:text-xl text-brand-muted max-w-2xl mx-auto mt-8"
-        style="opacity: 0; visibility: hidden; transform: translate3d(0, 40px, 0);"
+        style="
+          opacity: 0;
+          visibility: hidden;
+          transform: translate3d(0, 40px, 0);
+        "
       >
         Create, send, and track professional invoices in seconds. No
         spreadsheets, no hassle — just a clean tool that gets out of your way.
@@ -149,14 +161,22 @@ onUnmounted(() => {
         <NuxtLink
           to="/register"
           class="hero-cta-btn inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-brand-primary text-white dark:bg-white dark:text-brand-surface-dark preset-heading-s-variant hover:bg-white/90 transition-colors"
-          style="opacity: 0; visibility: hidden; transform: translate3d(0, 30px, 0);"
+          style="
+            opacity: 0;
+            visibility: hidden;
+            transform: translate3d(0, 30px, 0);
+          "
         >
           Get Started Free
         </NuxtLink>
         <NuxtLink
           to="/demo"
           class="hero-cta-btn inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full border-2 border-brand-muted-light text-brand-muted-dark dark:border-white/30 dark:text-white preset-heading-s-variant hover:border-white transition-colors"
-          style="opacity: 0; visibility: hidden; transform: translate3d(0, 30px, 0);"
+          style="
+            opacity: 0;
+            visibility: hidden;
+            transform: translate3d(0, 30px, 0);
+          "
         >
           View Live Demo
         </NuxtLink>
@@ -164,7 +184,7 @@ onUnmounted(() => {
 
       <p
         class="hero-trust mt-8 preset-body text-brand-muted/70"
-        style="opacity: 0; visibility: hidden;"
+        style="opacity: 0; visibility: hidden"
       >
         Trusted by 2,400+ freelancers and small businesses
       </p>
