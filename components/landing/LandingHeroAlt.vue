@@ -3,77 +3,100 @@ import { gsap } from "gsap";
 
 const heroRef = ref<HTMLElement | null>(null);
 const orbRef = ref<HTMLElement | null>(null);
-let ctx: gsap.Context;
+let ctx: gsap.Context | undefined;
+let orbFloatTween: gsap.core.Tween | undefined;
 
 onMounted(() => {
-  ctx = gsap.context(() => {
-    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+  if (!heroRef.value || !orbRef.value) {
+    return;
+  }
 
-    tl.from(".hero-line-1", {
-      y: 120,
-      opacity: 0,
+  ctx = gsap.context(() => {
+    const orbElement = orbRef.value;
+
+    if (!orbElement) {
+      return;
+    }
+
+    const orbFinalOpacity =
+      Number.parseFloat(getComputedStyle(orbElement).opacity) || 0.1;
+
+    const tl = gsap.timeline({
+      defaults: { ease: "power4.out" },
+      onComplete: () => {
+        orbFloatTween = gsap.to(orbElement, {
+          y: -20,
+          duration: 2.5,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        });
+      },
+    });
+
+    tl.to(".hero-line-1", {
+      y: 0,
+      autoAlpha: 1,
       duration: 1.4,
+      clearProps: "transform,opacity,visibility",
     })
-      .from(
+      .to(
         ".hero-line-2",
         {
-          y: 80,
-          opacity: 0,
+          y: 0,
+          autoAlpha: 1,
           duration: 1.2,
+          clearProps: "transform,opacity,visibility",
         },
         "-=0.8"
       )
-      .from(
-        orbRef.value!,
+      .to(
+        orbElement,
         {
-          scale: 0,
-          opacity: 0,
+          scale: 1,
+          opacity: orbFinalOpacity,
+          visibility: "visible",
           duration: 1,
           ease: "back.out(1.7)",
+          clearProps: "transform,opacity,visibility",
         },
         "-=0.6"
       )
-      .from(
+      .to(
         ".hero-subtitle",
         {
-          y: 40,
-          opacity: 0,
+          y: 0,
+          autoAlpha: 1,
           duration: 0.8,
+          clearProps: "transform,opacity,visibility",
         },
         "-=0.4"
       )
-      .from(
+      .to(
         ".hero-cta-btn",
         {
-          y: 30,
-          opacity: 0,
+          y: 0,
+          autoAlpha: 1,
           duration: 0.6,
           stagger: 0.12,
+          clearProps: "transform,opacity,visibility",
         },
         "-=0.3"
       )
-      .from(
+      .to(
         ".hero-trust",
         {
-          opacity: 0,
+          autoAlpha: 1,
           duration: 0.6,
+          clearProps: "transform,opacity,visibility",
         },
         "-=0.2"
       );
-
-    tl.then(() => {
-      gsap.to(orbRef.value!, {
-        y: -20,
-        duration: 2.5,
-        ease: "sine.inOut",
-        yoyo: true,
-        repeat: -1,
-      });
-    });
-  }, heroRef.value!);
+  }, heroRef.value);
 });
 
 onUnmounted(() => {
+  orbFloatTween?.kill();
   ctx?.revert();
 });
 </script>
@@ -91,7 +114,9 @@ onUnmounted(() => {
     <!-- Decorative orb -->
     <div
       ref="orbRef"
+      data-hero-orb
       class="absolute top-1/4 right-[10%] w-75 h-75 sm:w-100 sm:h-100 rounded-full bg-linear-to-br from-brand-primary to-brand-primary-light opacity-10 dark:opacity-20 blur-[80px] pointer-events-none"
+      style="visibility: hidden; transform: scale(0); transform-origin: center;"
     />
 
     <div
@@ -100,11 +125,13 @@ onUnmounted(() => {
       <h1>
         <span
           class="hero-line-1 block text-[clamp(40px,8vw,96px)] font-bold leading-[1.05] tracking-tight text-brand-black dark:text-[#ede7d9]"
+          style="opacity: 0; visibility: hidden; transform: translate3d(0, 120px, 0);"
         >
           Invoicing made simple.
         </span>
         <span
           class="hero-line-2 block text-[clamp(32px,6vw,80px)] font-bold leading-[1.1] tracking-tight text-brand-black/60 dark:text-[#ede7d9]/70 mt-2 sm:pl-[5%]"
+          style="opacity: 0; visibility: hidden; transform: translate3d(0, 80px, 0);"
         >
           so you can focus on your&nbsp;work.
         </span>
@@ -112,6 +139,7 @@ onUnmounted(() => {
 
       <p
         class="hero-subtitle text-lg sm:text-xl text-brand-muted max-w-2xl mx-auto mt-8"
+        style="opacity: 0; visibility: hidden; transform: translate3d(0, 40px, 0);"
       >
         Create, send, and track professional invoices in seconds. No
         spreadsheets, no hassle — just a clean tool that gets out of your way.
@@ -121,18 +149,23 @@ onUnmounted(() => {
         <NuxtLink
           to="/register"
           class="hero-cta-btn inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full bg-brand-primary text-white dark:bg-white dark:text-brand-surface-dark preset-heading-s-variant hover:bg-white/90 transition-colors"
+          style="opacity: 0; visibility: hidden; transform: translate3d(0, 30px, 0);"
         >
           Get Started Free
         </NuxtLink>
         <NuxtLink
           to="/demo"
           class="hero-cta-btn inline-flex items-center justify-center gap-2 h-12 px-8 rounded-full border-2 border-brand-muted-light text-brand-muted-dark dark:border-white/30 dark:text-white preset-heading-s-variant hover:border-white transition-colors"
+          style="opacity: 0; visibility: hidden; transform: translate3d(0, 30px, 0);"
         >
           View Live Demo
         </NuxtLink>
       </div>
 
-      <p class="hero-trust mt-8 preset-body text-brand-muted/70">
+      <p
+        class="hero-trust mt-8 preset-body text-brand-muted/70"
+        style="opacity: 0; visibility: hidden;"
+      >
         Trusted by 2,400+ freelancers and small businesses
       </p>
     </div>
