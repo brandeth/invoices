@@ -2,7 +2,14 @@
 import { Menu, X, Sun, Moon } from "@lucide/vue";
 
 const isDark = useState<boolean>("color-theme");
+const user = useSupabaseUser();
 const isMobileMenuOpen = ref(false);
+const authLinkTo = computed(() => (user.value ? "/dashboard" : "/login"));
+const authLinkLabel = computed(() => (user.value ? "Dashboard" : "Log In"));
+const ctaLinkTo = computed(() => (user.value ? "/dashboard" : "/register"));
+const ctaLinkLabel = computed(() =>
+  user.value ? "Go to Dashboard" : "Get Started Free",
+);
 
 function toggleMobileMenu() {
   isMobileMenuOpen.value = !isMobileMenuOpen.value;
@@ -71,16 +78,16 @@ function closeMobileMenu() {
           <Moon v-else :size="20" />
         </button>
         <NuxtLink
-          to="/login"
+          :to="authLinkTo"
           class="preset-heading-s-variant text-brand-muted-dark dark:text-brand-muted-light hover:text-brand-primary transition-colors"
         >
-          Log In
+          {{ authLinkLabel }}
         </NuxtLink>
         <NuxtLink
-          to="/register"
+          :to="ctaLinkTo"
           class="inline-flex items-center h-10 px-6 rounded-full bg-brand-primary text-white preset-heading-s-variant hover:bg-brand-primary-light transition-colors"
         >
-          Get Started Free
+          {{ ctaLinkLabel }}
         </NuxtLink>
       </div>
 
@@ -128,18 +135,18 @@ function closeMobileMenu() {
       </button>
       <div class="flex flex-col gap-3 pt-2">
         <NuxtLink
-          to="/login"
+          :to="authLinkTo"
           class="preset-heading-s-variant text-brand-muted-dark dark:text-brand-muted-light hover:text-brand-primary transition-colors py-2"
           @click="closeMobileMenu"
         >
-          Log In
+          {{ authLinkLabel }}
         </NuxtLink>
         <NuxtLink
-          to="/register"
+          :to="ctaLinkTo"
           class="inline-flex items-center justify-center h-10 px-6 rounded-full bg-brand-primary text-white preset-heading-s-variant hover:bg-brand-primary-light transition-colors"
           @click="closeMobileMenu"
         >
-          Get Started Free
+          {{ ctaLinkLabel }}
         </NuxtLink>
       </div>
     </div>

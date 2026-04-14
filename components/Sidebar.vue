@@ -131,7 +131,7 @@ onBeforeUnmount(() => {
           <div
             v-if="isProfileMenuOpen"
             role="menu"
-            class="absolute bottom-full left-1/2 z-50 mb-3 w-44 -translate-x-1/2 overflow-hidden rounded-lg bg-white shadow-[0_10px_20px_0_rgba(72,84,159,0.25)] max-xl:bottom-auto max-xl:left-auto max-xl:right-0 max-xl:top-full max-xl:mt-3 max-xl:translate-x-0 dark:bg-brand-dark-light"
+            class="absolute bottom-6 left-full z-50 ml-3 w-44 overflow-hidden rounded-lg bg-white shadow-[0_10px_20px_0_rgba(72,84,159,0.25)] max-xl:left-auto max-xl:right-0 max-xl:top-full max-xl:mt-3 max-xl:ml-0 max-xl:translate-y-0 dark:bg-brand-dark-light"
           >
             <NuxtLink
               to="/profile"
