@@ -179,7 +179,7 @@ onUnmounted(() => {
         </Button>
         <Button
           variant="outline"
-          class="hero-cta-btn"
+          class="hero-cta-btn justify-center"
           style="
             opacity: 0;
             visibility: hidden;
