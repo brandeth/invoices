@@ -102,13 +102,13 @@ const isDark = useState<boolean>("color-theme");
 
       <!-- Bottom row -->
       <div
-        class="border-t border-brand-muted-light/30 dark:border-brand-dark-light mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4"
+        class="border-t border-brand-muted-light/30 dark:border-brand-dark-light mt-8 pt-8 flex flex-row justify-between items-center gap-4"
       >
-        <p class="preset-body text-brand-muted">
+        <p class="preset-body text-brand-muted min-w-0 text-left">
           &copy; 2026 Invoices. All rights reserved.
         </p>
         <button
-          class="flex items-center justify-center h-10 w-10 rounded-full text-brand-muted hover:text-brand-primary transition-colors"
+          class="flex shrink-0 items-center justify-center h-10 w-10 rounded-full text-brand-muted hover:text-brand-primary transition-colors"
           aria-label="Toggle dark mode"
           @click="isDark = !isDark"
         >
